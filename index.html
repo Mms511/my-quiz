@@ -3,359 +3,292 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IT Review Comprehensive Quiz</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>اختبار تقنية المعلومات التفاعلي</title>
     <style>
+        :root {
+            --primary: #4f46e5;
+            --bg: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --correct-bg: #d1fae5;
+            --correct-border: #10b981;
+            --correct-text: #065f46;
+            --wrong-bg: #fee2e2;
+            --wrong-border: #ef4444;
+            --wrong-text: #991b1b;
+        }
         body {
-            font-family: 'Tajawal', 'Inter', sans-serif;
-            background-color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
         }
-        .question-text {
-            font-family: 'Inter', sans-serif;
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
         }
-        
-        /* Custom styles for radio buttons */
-        .option-label {
-            transition: all 0.2s ease-in-out;
+        header {
+            text-align: center;
+            margin-bottom: 30px;
         }
-        .option-label:hover:not(.disabled) {
-            background-color: #f1f5f9;
+        header h1 {
+            color: var(--primary);
+            font-size: 2em;
         }
-        input[type="radio"]:checked + .custom-radio {
-            border-color: #3b82f6;
-            background-color: #3b82f6;
+        header p {
+            color: #6b7280;
+            font-size: 1.1em;
         }
-        input[type="radio"]:checked + .custom-radio::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: white;
+        .question-card {
+            background: var(--card-bg);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 24px;
+            direction: ltr; /* الأسئلة بالإنجليزية */
+            text-align: left;
         }
-
-        /* Result highlighting classes */
-        .correct-answer {
-            background-color: #dcfce7 !important; /* Tailwind green-100 */
-            border-color: #22c55e !important; /* Tailwind green-500 */
-            color: #166534 !important; /* Tailwind green-800 */
+        .question-title {
+            font-size: 1.25em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #111827;
         }
-        .incorrect-answer {
-            background-color: #fee2e2 !important; /* Tailwind red-100 */
-            border-color: #ef4444 !important; /* Tailwind red-500 */
-            color: #991b1b !important; /* Tailwind red-800 */
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
-        .disabled {
+        .option {
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.05em;
+            transition: all 0.2s ease;
+            background-color: #f9fafb;
+        }
+        .option:hover {
+            background-color: #f3f4f6;
+            border-color: #d1d5db;
+        }
+        .option.disabled {
             pointer-events: none;
-            opacity: 0.8;
         }
-        
-        /* Modal Animation */
+        .option.correct {
+            background-color: var(--correct-bg);
+            border-color: var(--correct-border);
+            color: var(--correct-text);
+            font-weight: bold;
+        }
+        .option.wrong {
+            background-color: var(--wrong-bg);
+            border-color: var(--wrong-border);
+            color: var(--wrong-text);
+            font-weight: bold;
+        }
+        .explanation {
+            margin-top: 16px;
+            padding: 16px;
+            border-radius: 8px;
+            display: none;
+            direction: rtl; /* الشرح بالعربية */
+            text-align: right;
+            font-size: 1.1em;
+            animation: fadeIn 0.4s;
+        }
+        .explanation.show {
+            display: block;
+        }
+        .exp-correct {
+            background-color: var(--correct-bg);
+            color: var(--correct-text);
+            border-right: 5px solid var(--correct-border);
+        }
+        .exp-wrong {
+            background-color: var(--wrong-bg);
+            color: var(--wrong-text);
+            border-right: 5px solid var(--wrong-border);
+        }
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        .modal-animate {
-            animation: fadeIn 0.3s ease-out forwards;
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
-<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+<body>
 
-    <header class="bg-blue-600 text-white shadow-lg sticky top-0 z-40">
-        <div class="container mx-auto px-4 py-6 max-w-4xl flex flex-col md:flex-row items-center justify-between">
-            <div>
-                <h1 class="text-2xl font-bold mb-2">الاختبار الشامل لمراجعة تقنية المعلومات</h1>
-                <p class="text-blue-100 text-sm">أجب عن جميع الأسئلة الـ 80 التالية ثم اضغط على زر "تسليم الإجابات" في الأسفل لترى نتيجتك.</p>
-            </div>
-            <div id="score-display-header" class="hidden mt-4 md:mt-0 bg-white text-blue-600 px-4 py-2 rounded-lg font-bold shadow">
-                النتيجة: <span id="header-score-value">0</span> / 80
-            </div>
-        </div>
-    </header>
-
-    <main class="container mx-auto px-4 py-8 max-w-4xl flex-grow">
-        <div id="quiz-container" class="space-y-6">
-            <!-- Questions will be injected here by JS -->
-        </div>
-
-        <div class="mt-10 mb-8 flex justify-center">
-            <button id="submit-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-12 rounded-xl shadow-lg transition-colors text-lg focus:outline-none focus:ring-4 focus:ring-blue-300">
-                تسليم الإجابات وإظهار النتيجة
-            </button>
-        </div>
-    </main>
-
-    <!-- Results Modal -->
-    <div id="results-modal" class="fixed inset-0 bg-slate-900 bg-opacity-50 z-50 hidden flex items-center justify-center backdrop-blur-sm px-4">
-        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full modal-animate text-center">
-            <h2 class="text-3xl font-bold mb-4 text-slate-800">اكتمل الاختبار!</h2>
-            <p class="text-slate-600 mb-6">لقد قمت بالإجابة على الأسئلة بنجاح.</p>
-            
-            <div class="bg-blue-50 border border-blue-100 rounded-xl p-6 mb-6">
-                <div class="text-sm text-blue-600 font-semibold mb-1">نتيجتك النهائية</div>
-                <div class="text-5xl font-bold text-blue-700 flex justify-center items-baseline gap-2">
-                    <span id="modal-score">0</span>
-                    <span class="text-2xl text-blue-500">/ 80</span>
-                </div>
-                <div id="modal-percentage" class="text-lg font-medium text-blue-600 mt-2">0%</div>
-            </div>
-            
-            <p class="text-sm text-slate-500 mb-6">قم بالتمرير للأسفل لمراجعة إجاباتك. الإجابات الصحيحة مظللة باللون الأخضر والخاطئة باللون الأحمر.</p>
-            
-            <button id="close-modal-btn" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-4 rounded-lg transition-colors">
-                مراجعة الإجابات
-            </button>
-        </div>
+    <div class="container">
+        <header>
+            <h1>اختبار تقنية المعلومات الشامل</h1>
+            <p>اختر الإجابة لتصحيحها فوراً (80 سؤال)</p>
+        </header>
+        
+        <div id="quiz-container"></div>
     </div>
 
     <script>
-        // Array of all 80 questions parsed from the prompt
-        // Structure: { q: "Question text", options: ["opt1", "opt2",...], ans: correct_index }
-        const questionsData = [
-            { q: "Which type of computer is the most powerful?", options: ["PC", "Server", "Mainframe", "Supercomputer"], ans: 3 },
-            { q: "A washing machine controller is an example of", options: ["General-purpose computer", "Personal computer", "Special-purpose computer", "Server"], ans: 2 },
-            { q: "Which IT professional is responsible for protecting systems from cyber threats?", options: ["Web Developer", "Software Developer", "Security Specialist", "Database Administrator"], ans: 2 },
-            { q: "Which skill is essential for IT professionals due to rapid technology changes?", options: ["Problem solving", "Communication", "Lifelong learning", "Teamwork"], ans: 2 },
-            { q: "Which of the following is a network device?", options: ["Router", "Printer", "Monitor", "Scanner"], ans: 0 },
-            { q: "Which of the following is an example of storage?", options: ["Monitor", "SSD", "CPU", "Keyboard"], ans: 1 },
-            { q: "Software is defined as", options: ["Physical parts of a computer", "Internet services", "Programs and instructions that tell a computer what to do", "Computer users"], ans: 2 },
-            { q: "Which type of software manages hardware and provides a platform for applications?", options: ["Application software", "Educational software", "System software", "Multimedia software"], ans: 2 },
-            { q: "Microsoft Word is an example of", options: ["System software", "Utility software", "Application software", "Network software"], ans: 2 },
-            { q: "A computer network is used mainly to", options: ["Increase computer speed", "Share information and resources", "Store data only", "Repair computers"], ans: 1 },
-            { q: "Which stage of the IPOS cycle involves entering data into the computer?", options: ["Processing", "Storage", "Output", "Input"], ans: 3 },
-            { q: "Which device is considered an input device?", options: ["Monitor", "Printer", "Keyboard", "Speaker"], ans: 2 },
-            { q: "Which component performs processing in a computer system?", options: ["RAM", "CPU", "Hard disk", "Monitor"], ans: 1 },
-            { q: "Which of the following is an output device?", options: ["Scanner", "Mouse", "Speaker", "Keyboard"], ans: 2 },
-            { q: "Saving data for future use is called:", options: ["Processing", "Output", "Input", "Storage"], ans: 3 },
-            { q: "What does Information Technology (IT) refer to?", options: ["Only computer programming", "Using computers, systems, data, and people to manage information", "Repairing computer hardware", "Using the Internet for entertainment"], ans: 1 },
-            { q: "Which of the following is NOT a meaning of IT?", options: ["Careers that use computers", "Computer systems and components", "IT staff", "Computer games"], ans: 3 },
-            { q: "A computer system is best defined as", options: ["A single computer device", "A collection of software only", "A complete set of components working together to process information", "A network connection"], ans: 2 },
-            { q: "Which component of a computer system refers to physical parts you can touch?", options: ["Software", "Data", "Hardware", "Users"], ans: 2 },
-            { q: "What does IPOS stand for?", options: ["Internet, Processing, Output, System", "Input, Processing, Output, Storage", "Information, Program, Output, Software", "Input, Program, Operating system, Storage"], ans: 1 },
-            { q: "Registers are", options: ["Large and slow memory units", "External storage devices", "Very fast, small memory inside the CPU", "Network components"], ans: 2 },
-            { q: "The correct order of the instruction cycle is", options: ["Decode-Fetch-Execute-Store", "Fetch-Decode-Execute-Store", "Execute-Fetch-Store-Decode", "Store-Execute-Decode-Fetch"], ans: 1 },
-            { q: "In the instruction cycle, the ALU mainly works during which stage?", options: ["Fetch", "Decode", "Execute", "Store"], ans: 2 },
-            { q: "Memory hierarchy is organized based on", options: ["Color and shape", "Brand and manufacturer", "Speed and size", "Power consumption only"], ans: 2 },
-            { q: "Which is the fastest memory type?", options: ["Secondary storage", "RAM", "Cache", "Registers"], ans: 3 },
-            { q: "The system bus is best described as", options: ["A cooling system", "A communication path between components", "A power cable", "A storage device"], ans: 1 },
-            { q: "The data bus is responsible for", options: ["Carrying control signals", "Carrying memory addresses", "Transferring actual data", "Managing power supply"], ans: 2 },
-            { q: "The address bus carries", options: ["User passwords", "Memory addresses", "Control instructions", "Graphic data only"], ans: 1 },
-            { q: "The control bus sends signals such as", options: ["Numbers and images", "Read and write commands", "Memory capacity", "File names"], ans: 1 },
-            { q: "A single-core CPU can", options: ["Perform unlimited tasks simultaneously", "Execute only one task at a time", "Replace RAM", "Eliminate storage"], ans: 1 },
-            { q: "Multi-core architecture improves performance mainly by", options: ["Increasing monitor size", "Reducing storage capacity", "Allowing multiple tasks to run simultaneously", "Removing the control unit"], ans: 2 },
-            { q: "Increasing the number of CPU cores generally leads to", options: ["Slower system performance", "Reduced multitasking capability", "Better multitasking and smoother performance", "Removal of instruction cycles"], ans: 2 },
-            { q: "What is system architecture?", options: ["A type of operating system", "The overall design of a computer system", "A programming language", "A storage device"], ans: 1 },
-            { q: "System architecture describes all of the following EXCEPT", options: ["System components", "Functions of each component", "Communication between components", "Internet connection speed"], ans: 3 },
-            { q: "One main reason to study system architecture is to", options: ["Replace hardware daily", "Improve performance and efficiency", "Avoid using software", "Eliminate memory usage"], ans: 1 },
-            { q: "Which of the following is NOT a main component of a computer system?", options: ["CPU", "Memory", "Compiler", "Storage"], ans: 2 },
-            { q: "The CPU is commonly described as", options: ["The storage unit", "The brain of the computer", "The input device", "The power supply"], ans: 1 },
-            { q: "RAM is considered volatile because", options: ["It is very slow", "It stores data permanently", "Data is lost when power is off", "It cannot store programs"], ans: 2 },
-            { q: "Which component stores data permanently?", options: ["Registers", "Cache", "RAM", "Secondary storage"], ans: 3 },
-            { q: "The Arithmetic Logic Unit (ALU) is responsible for", options: ["Controlling input devices", "Performing calculations", "Managing storage devices", "Displaying output"], ans: 1 },
-            { q: "What is an operating system?", options: ["A hardware component", "System software that manages hardware", "A programming language", "A network device"], ans: 1 },
-            { q: "The OS acts as", options: ["Storage device", "Interface between user and hardware", "Antivirus", "Firewall"], ans: 1 },
-            { q: "The kernel is", options: ["External software", "The central part of the OS", "A user application", "A network tool"], ans: 1 },
-            { q: "The kernel has", options: ["Limited access", "No control", "Full hardware privileges", "Internet access only"], ans: 2 },
-            { q: "A process is", options: ["Hardware device", "File system", "Network connection", "Program in execution"], ans: 3 },
-            { q: "Which is NOT a process state?", options: ["Ready", "Running", "Waiting", "Installed"], ans: 3 },
-            { q: "Multitasking means", options: ["Multiple programs running seemingly at once", "One program at a time", "No programs", "Only background tasks"], ans: 0 },
-            { q: "Memory management is responsible for", options: ["Internet speed", "Allocating memory to processes", "Printing files", "Deleting data"], ans: 1 },
-            { q: "Resource management controls", options: ["Only memory", "Only CPU", "CPU, storage, and I/O", "Internet only"], ans: 2 },
-            { q: "Protection and security ensure", options: ["Faster CPU", "No crashes", "Authorized access only", "More storage"], ans: 2 },
-            { q: "Interrupts are", options: ["Errors", "Signals to the OS", "Files", "Programs"], ans: 1 },
-            { q: "When an interrupt occurs, the OS", options: ["Shuts down", "Ignores it", "Pauses current process", "Deletes data"], ans: 2 },
-            { q: "Single-tasking means", options: ["Many processes", "One process at a time", "No processes", "Background tasks"], ans: 1 },
-            { q: "Batch processing", options: ["Runs jobs together without interruption", "Allows interaction", "Runs one task forever", "Uses internet only"], ans: 0 },
-            { q: "Concurrent processing", options: ["One task only", "Tasks overlap in execution", "No CPU use", "Only offline tasks"], ans: 1 },
-            { q: "Multiprogramming", options: ["One program in memory", "No programs", "Multiple programs in memory", "Only games"], ans: 2 },
-            { q: "Multithreading", options: ["Multiple CPUs", "Multiple threads in one process", "One thread only", "No execution"], ans: 1 },
-            { q: "Multiprocessing uses", options: ["Multiple CPUs or cores", "One CPU", "No CPU", "RAM only"], ans: 0 },
-            { q: "Device drivers", options: ["Hardware devices", "Network cables", "Security tools", "Translate OS commands to hardware"], ans: 3 },
-            { q: "Booting is", options: ["Starting the system and loading OS", "Deleting files", "Installing apps", "Running programs"], ans: 0 },
-            { q: "What is a computer network?", options: ["A single computer", "A group of connected computers and resources", "A storage device", "A software program"], ans: 1 },
-            { q: "The main purpose of a network is", options: ["Communication and resource sharing", "Gaming", "Printing only", "Programming"], ans: 0 },
-            { q: "Which is a network benefit?", options: ["No cost", "Sharing data and hardware", "Slower performance", "No security"], ans: 1 },
-            { q: "A local computer is", options: ["Computer used physically by the user", "Remote device", "Server", "Cloud system"], ans: 0 },
-            { q: "A remote computer is accessed using", options: ["USB", "Bluetooth only", "Remote Desktop, SSH, Telnet", "Printer"], ans: 2 },
-            { q: "The physical level includes", options: ["Protocols", "Topology", "Hardware and cables", "Software"], ans: 2 },
-            { q: "The logical level focuses on", options: ["Hardware", "Structure and topology", "Users", "Storage"], ans: 1 },
-            { q: "The software level includes", options: ["Switches", "Routers", "Protocols and programs", "Cables"], ans: 2 },
-            { q: "Bandwidth refers to", options: ["Distance", "Transfer rate of data", "Device size", "CPU speed"], ans: 1 },
-            { q: "A hub", options: ["Connects networks", "Connects multiple computers", "Routes packets", "Stores data"], ans: 1 },
-            { q: "A switch uses", options: ["MAC addresses", "IP addresses", "Ports only", "Files"], ans: 0 },
-            { q: "A router", options: ["Connects computers", "Connects multiple networks", "Stores data", "Encrypts data"], ans: 1 },
-            { q: "A gateway", options: ["Connects same networks", "Stores files", "Connects different types of networks", "Speeds internet"], ans: 2 },
-            { q: "Network mapping is", options: ["Programming", "Visual representation of a network", "Security tool", "Storage method"], ans: 1 },
-            { q: "Which is a step in network mapping?", options: ["Coding", "Data collection", "Deleting files", "Formatting disk"], ans: 1 },
-            { q: "Physical topology shows", options: ["Data flow", "IP addresses", "Actual layout of devices", "Programs"], ans: 2 },
-            { q: "Logical topology shows", options: ["Cables only", "Device shape", "Data flow and relationships", "Hardware damage"], ans: 2 },
-            { q: "Which network is the smallest?", options: ["WAN", "MAN", "LAN", "PAN"], ans: 3 },
-            { q: "In Client–Server", options: ["All devices equal", "Clients respond", "Servers respond to requests", "No communication"], ans: 2 },
-            { q: "TCP/IP is", options: ["Hardware", "Network cable", "Communication protocol", "Storage system"], ans: 2 }
+        // جميع الأسئلة الـ 80
+        const quizData = [
+            // المجموعة 1
+            { q: "Which type of computer is the most powerful?", opts: ["PC", "Server", "Mainframe", "Supercomputer"], ans: "Supercomputer" },
+            { q: "A washing machine controller is an example of", opts: ["General-purpose computer", "Personal computer", "Special-purpose computer", "Server"], ans: "Special-purpose computer" },
+            { q: "Which IT professional is responsible for protecting systems from cyber threats", opts: ["Web Developer", "Software Developer", "Security Specialist", "Database Administrator"], ans: "Security Specialist" },
+            { q: "Which skill is essential for IT professionals due to rapid technology changes", opts: ["Problem solving", "Communication", "Lifelong learning", "Teamwork"], ans: "Lifelong learning" },
+            { q: "Which of the following is a network device", opts: ["Router", "Printer", "Monitor", "Scanner"], ans: "Router" },
+            // المجموعة 2
+            { q: "Which of the following is an example of storage", opts: ["Monitor", "SSD", "CPU", "Keyboard"], ans: "SSD" },
+            { q: "Software is defined as", opts: ["Physical parts of a computer", "Internet services", "Programs and instructions that tell a computer what to do", "Computer users"], ans: "Programs and instructions that tell a computer what to do" },
+            { q: "Which type of software manages hardware and provides a platform for applications", opts: ["Application software", "Educational software", "System software", "Multimedia software"], ans: "System software" },
+            { q: "Microsoft Word is an example of", opts: ["System software", "Utility software", "Application software", "Network software"], ans: "Application software" },
+            { q: "A computer network is used mainly to", opts: ["Increase computer speed", "Share information and resources", "Store data only", "Repair computers"], ans: "Share information and resources" },
+            // المجموعة 3
+            { q: "Which stage of the IPOS cycle involves entering data into the computer", opts: ["Processing", "Storage", "Output", "Input"], ans: "Input" },
+            { q: "Which device is considered an input device", opts: ["Monitor", "Printer", "Keyboard", "Speaker"], ans: "Keyboard" },
+            { q: "Which component performs processing in a computer system", opts: ["RAM", "CPU", "Hard disk", "Monitor"], ans: "CPU" },
+            { q: "Which of the following is an output device", opts: ["Scanner", "Mouse", "Speaker", "Keyboard"], ans: "Speaker" },
+            { q: "Saving data for future use is called:", opts: ["Processing", "Output", "Input", "Storage"], ans: "Storage" },
+            // المجموعة 4
+            { q: "What does Information Technology (IT) refer to", opts: ["Only computer programming", "Using computers, systems, data, and people to manage information", "Repairing computer hardware", "Using the Internet for entertainment"], ans: "Using computers, systems, data, and people to manage information" },
+            { q: "Which of the following is NOT a meaning of IT", opts: ["Careers that use computers", "Computer systems and components", "IT staff", "Computer games"], ans: "Computer games" },
+            { q: "A computer system is best defined as", opts: ["A single computer device", "A collection of software only", "A complete set of components working together to process information", "A network connection"], ans: "A complete set of components working together to process information" },
+            { q: "Which component of a computer system refers to physical parts you can touch", opts: ["Software", "Data", "Hardware", "Users"], ans: "Hardware" },
+            { q: "What does IPOS stand for", opts: ["Internet, Processing, Output, System", "Input, Processing, Output, Storage", "Information, Program, Output, Software", "Input, Program, Operating system, Storage"], ans: "Input, Processing, Output, Storage" },
+            // المجموعة 5
+            { q: "Registers are", opts: ["Large and slow memory units", "External storage devices", "Very fast, small memory inside the CPU", "Network components"], ans: "Very fast, small memory inside the CPU" },
+            { q: "The correct order of the instruction cycle is", opts: ["Decode – Fetch – Execute – Store", "Fetch – Decode – Execute – Store", "Execute – Fetch – Store – Decode", "Store – Execute – Decode – Fetch"], ans: "Fetch – Decode – Execute – Store" },
+            { q: "In the instruction cycle, the ALU mainly works during which stage", opts: ["Fetch", "Decode", "Execute", "Store"], ans: "Execute" },
+            { q: "Memory hierarchy is organized based on", opts: ["Color and shape", "Brand and manufacturer", "Speed and size", "Power consumption only"], ans: "Speed and size" },
+            // المجموعة 6
+            { q: "Which is the fastest memory type", opts: ["Secondary storage", "RAM", "Cache", "Registers"], ans: "Registers" },
+            { q: "The system bus is best described as", opts: ["A cooling system", "A communication path between components", "A power cable", "A storage device"], ans: "A communication path between components" },
+            { q: "The data bus is responsible for", opts: ["Carrying control signals", "Carrying memory addresses", "Transferring actual data", "Managing power supply"], ans: "Transferring actual data" },
+            { q: "The address bus carries", opts: ["User passwords", "Memory addresses", "Control instructions", "Graphic data only"], ans: "Memory addresses" },
+            // المجموعة 7
+            { q: "The control bus sends signals such as", opts: ["Numbers and images", "Read and write commands", "Memory capacity", "File names"], ans: "Read and write commands" },
+            { q: "A single-core CPU can", opts: ["Perform unlimited tasks simultaneously", "Execute only one task at a time", "Replace RAM", "Eliminate storage"], ans: "Execute only one task at a time" },
+            { q: "Multi-core architecture improves performance mainly by", opts: ["Increasing monitor size", "Reducing storage capacity", "Allowing multiple tasks to run simultaneously", "Removing the control unit"], ans: "Allowing multiple tasks to run simultaneously" },
+            { q: "Increasing the number of CPU cores generally leads to", opts: ["Slower system performance", "Reduced multitasking capability", "Better multitasking and smoother performance", "Removal of instruction cycles"], ans: "Better multitasking and smoother performance" },
+            // المجموعة 8
+            { q: "What is system architecture", opts: ["A type of operating system", "The overall design of a computer system", "A programming language", "A storage device"], ans: "The overall design of a computer system" },
+            { q: "System architecture describes all of the following EXCEPT", opts: ["System components", "Functions of each component", "Communication between components", "Internet connection speed"], ans: "Internet connection speed" },
+            { q: "One main reason to study system architecture is to", opts: ["Replace hardware daily", "Improve performance and efficiency", "Avoid using software", "Eliminate memory usage"], ans: "Improve performance and efficiency" },
+            { q: "Which of the following is NOT a main component of a computer system", opts: ["CPU", "Memory", "Compiler", "Storage"], ans: "Compiler" },
+            // المجموعة 9
+            { q: "The CPU is commonly described as", opts: ["The storage unit", "The brain of the computer", "The input device", "The power supply"], ans: "The brain of the computer" },
+            { q: "RAM is considered volatile because", opts: ["It is very slow", "It stores data permanently", "Data is lost when power is off", "It cannot store programs"], ans: "Data is lost when power is off" },
+            { q: "Which component stores data permanently", opts: ["Registers", "Cache", "RAM", "Secondary storage"], ans: "Secondary storage" },
+            { q: "The Arithmetic Logic Unit (ALU) is responsible for", opts: ["Controlling input devices", "Performing calculations", "Managing storage devices", "Displaying output"], ans: "Performing calculations" },
+            // المجموعة 10
+            { q: "?What is an operating system", opts: ["A hardware component", "System software that manages hardware", "A programming language", "A network device"], ans: "System software that manages hardware" },
+            { q: "The OS acts as", opts: ["Storage device", "Interface between user and hardware", "Antivirus", "Firewall"], ans: "Interface between user and hardware" },
+            { q: "The kernel is", opts: ["External software", "The central part of the OS", "A user application", "A network tool"], ans: "The central part of the OS" },
+            { q: "The kernel has", opts: ["Limited access", "No control", "Full hardware privileges", "Internet access only"], ans: "Full hardware privileges" },
+            // المجموعة 11
+            { q: "A process is", opts: ["Hardware device", "File system", "Network connection", "Program in execution"], ans: "Program in execution" },
+            { q: "?Which is NOT a process state", opts: ["Ready", "Running", "Waiting", "Installed"], ans: "Installed" },
+            { q: "Multitasking means", opts: ["Multiple programs running seemingly at once", "One program at a time", "No programs", "Only background tasks"], ans: "Multiple programs running seemingly at once" },
+            { q: "Memory management is responsible for", opts: ["Internet speed", "Allocating memory to processes", "Printing files", "Deleting data"], ans: "Allocating memory to processes" },
+            // المجموعة 12
+            { q: "Resource management controls", opts: ["Only memory", "Only CPU", "CPU, storage, and I/O", "Internet only"], ans: "CPU, storage, and I/O" },
+            { q: "Protection and security ensure", opts: ["Faster CPU", "No crashes", "Authorized access only", "More storage"], ans: "Authorized access only" },
+            { q: "Interrupts are", opts: ["Errors", "Signals to the OS", "Files", "Programs"], ans: "Signals to the OS" },
+            { q: "When an interrupt occurs, the OS", opts: ["Shuts down", "Ignores it", "Pauses current process", "Deletes data"], ans: "Pauses current process" },
+            // المجموعة 13
+            { q: "Single-tasking means", opts: ["Many processes", "One process at a time", "No processes", "Background tasks"], ans: "One process at a time" },
+            { q: "Batch processing", opts: ["Runs jobs together without interruption", "Allows interaction", "Runs one task forever", "Uses internet only"], ans: "Runs jobs together without interruption" },
+            { q: "Concurrent processing", opts: ["One task only", "Tasks overlap in execution", "No CPU use", "Only offline tasks"], ans: "Tasks overlap in execution" },
+            { q: "Multiprogramming", opts: ["One program in memory", "No programs", "Multiple programs in memory", "Only games"], ans: "Multiple programs in memory" },
+            // المجموعة 14
+            { q: "Multithreading", opts: ["Multiple CPUs", "Multiple threads in one process", "One thread only", "No execution"], ans: "Multiple threads in one process" },
+            { q: "Multiprocessing uses", opts: ["Multiple CPUs or cores", "One CPU", "No CPU", "RAM only"], ans: "Multiple CPUs or cores" },
+            { q: "Device drivers", opts: ["Hardware devices", "Network cables", "Security tools", "Translate OS commands to hardware"], ans: "Translate OS commands to hardware" },
+            { q: "Booting is", opts: ["Starting the system and loading OS", "Deleting files", "Installing apps", "Running programs"], ans: "Starting the system and loading OS" },
+            // المجموعة 15
+            { q: "?What is a computer network", opts: ["A single computer", "A group of connected computers and resources", "A storage device", "A software program"], ans: "A group of connected computers and resources" },
+            { q: "The main purpose of a network is", opts: ["Communication and resource sharing", "Gaming", "Printing only", "Programming"], ans: "Communication and resource sharing" },
+            { q: "Which is a network benefit", opts: ["No cost", "Sharing data and hardware", "Slower performance", "No security"], ans: "Sharing data and hardware" },
+            { q: "A local computer is", opts: ["Computer used physically by the user", "Remote device", "Server", "Cloud system"], ans: "Computer used physically by the user" },
+            // المجموعة 16
+            { q: "A remote computer is accessed using", opts: ["USB", "Bluetooth only", "Remote Desktop, SSH, Telnet", "Printer"], ans: "Remote Desktop, SSH, Telnet" },
+            { q: "The physical level includes", opts: ["Protocols", "Topology", "Hardware and cables", "Software"], ans: "Hardware and cables" },
+            { q: "The logical level focuses on", opts: ["Hardware", "Structure and topology", "Users", "Storage"], ans: "Structure and topology" },
+            { q: "The software level includes", opts: ["Switches", "Routers", "Protocols and programs", "Cables"], ans: "Protocols and programs" },
+            // المجموعة 17
+            { q: "Bandwidth refers to", opts: ["Distance", "Transfer rate of data", "Device size", "CPU speed"], ans: "Transfer rate of data" },
+            { q: "A hub", opts: ["Connects networks", "Connects multiple computers", "Routes packets", "Stores data"], ans: "Connects multiple computers" },
+            { q: "A switch uses", opts: ["MAC addresses", "IP addresses", "Ports only", "Files"], ans: "MAC addresses" },
+            { q: "A router", opts: ["Connects computers", "Connects multiple networks", "Stores data", "Encrypts data"], ans: "Connects multiple networks" },
+            // المجموعة 18
+            { q: "A gateway", opts: ["Connects same networks", "Stores files", "Connects different types of networks", "Speeds internet"], ans: "Connects different types of networks" },
+            { q: "Network mapping is", opts: ["Programming", "Visual representation of a network", "Security tool", "Storage method"], ans: "Visual representation of a network" },
+            { q: "Which is a step in network mapping", opts: ["Coding", "Data collection", "Deleting files", "Formatting disk"], ans: "Data collection" },
+            { q: "Physical topology shows", opts: ["Data flow", "IP addresses", "Actual layout of devices", "Programs"], ans: "Actual layout of devices" },
+            // المجموعة 19
+            { q: "Logical topology shows", opts: ["Cables only", "Device shape", "Data flow and relationships", "Hardware damage"], ans: "Data flow and relationships" },
+            { q: "Which network is the smallest", opts: ["WAN", "MAN", "LAN", "PAN"], ans: "PAN" },
+            { q: "In Client–Server", opts: ["All devices equal", "Clients respond", "Servers respond to requests", "No communication"], ans: "Servers respond to requests" },
+            { q: "TCP/IP is", opts: ["Hardware", "Network cable", "Communication protocol", "Storage system"], ans: "Communication protocol" }
         ];
 
-        const quizContainer = document.getElementById('quiz-container');
-        const submitBtn = document.getElementById('submit-btn');
-        const resultsModal = document.getElementById('results-modal');
-        const closeModalBtn = document.getElementById('close-modal-btn');
-        
-        let hasSubmitted = false;
+        const container = document.getElementById('quiz-container');
 
-        // Function to render all questions
-        function renderQuiz() {
-            quizContainer.innerHTML = ''; // Clear container
-            
-            questionsData.forEach((qData, index) => {
-                const questionNum = index + 1;
-                
-                // Create question card
-                // Note: dir="ltr" is explicitly set here so English text renders correctly Left-to-Right
-                const card = document.createElement('div');
-                card.className = 'bg-white rounded-xl shadow-sm border border-slate-200 p-6 question-card';
-                card.dir = 'ltr'; 
-                card.id = `q-card-${index}`;
+        quizData.forEach((item, index) => {
+            // إنشاء كرت السؤال
+            const card = document.createElement('div');
+            card.className = 'question-card';
 
-                // Header / Question text
-                const header = document.createElement('h3');
-                header.className = 'text-lg font-semibold text-slate-800 mb-4 question-text leading-relaxed';
-                header.innerHTML = `<span class="text-blue-600 mr-2">${questionNum}.</span> ${qData.q}`;
-                card.appendChild(header);
+            // عنوان السؤال
+            const title = document.createElement('div');
+            title.className = 'question-title';
+            title.innerText = `${index + 1}. ${item.q}`;
+            card.appendChild(title);
 
-                // Options Container
-                const optionsContainer = document.createElement('div');
-                optionsContainer.className = 'space-y-3';
+            // حاوية الخيارات
+            const optionsContainer = document.createElement('div');
+            optionsContainer.className = 'options-container';
 
-                // Render each option
-                qData.options.forEach((opt, optIndex) => {
-                    const optionId = `q${index}_opt${optIndex}`;
-                    
-                    const label = document.createElement('label');
-                    label.className = 'option-label flex items-center p-3 rounded-lg border border-slate-200 cursor-pointer text-slate-700 bg-white';
-                    label.id = `label_${optionId}`;
-                    label.htmlFor = optionId;
+            // مربع الشرح
+            const explanation = document.createElement('div');
+            explanation.className = 'explanation';
 
-                    const input = document.createElement('input');
-                    input.type = 'radio';
-                    input.name = `question${index}`;
-                    input.id = optionId;
-                    input.value = optIndex;
-                    input.className = 'hidden'; // Hide default radio
+            // إنشاء الخيارات
+            item.opts.forEach(opt => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.innerText = opt;
 
-                    // Custom radio circle
-                    const customRadio = document.createElement('div');
-                    customRadio.className = 'custom-radio w-5 h-5 rounded-full border-2 border-slate-300 mr-3 flex-shrink-0 relative';
+                // وظيفة عند الضغط على الإجابة
+                optionDiv.onclick = () => {
+                    // تعطيل جميع الخيارات لهذا السؤال حتى لا يتغير
+                    Array.from(optionsContainer.children).forEach(child => {
+                        child.classList.add('disabled');
+                        // تلوين الإجابة الصحيحة دائماً حتى لو أخطأ الطالب
+                        if (child.innerText === item.ans) {
+                            child.classList.add('correct');
+                        }
+                    });
 
-                    const spanText = document.createElement('span');
-                    spanText.className = 'text-base question-text';
-                    spanText.textContent = opt;
-
-                    label.appendChild(input);
-                    label.appendChild(customRadio);
-                    label.appendChild(spanText);
-
-                    optionsContainer.appendChild(label);
-                });
-
-                card.appendChild(optionsContainer);
-                quizContainer.appendChild(card);
-            });
-        }
-
-        function evaluateQuiz() {
-            if (hasSubmitted) return; // Prevent double submission
-            
-            let score = 0;
-            const totalQuestions = questionsData.length;
-
-            questionsData.forEach((qData, index) => {
-                // Get selected option
-                const selectedInput = document.querySelector(`input[name="question${index}"]:checked`);
-                const optionsList = document.querySelectorAll(`input[name="question${index}"]`);
-                
-                // Disable all inputs to prevent changing answers
-                optionsList.forEach(input => {
-                    input.disabled = true;
-                    // Add disabled class to label for styling
-                    document.getElementById(`label_${input.id}`).classList.add('disabled');
-                });
-
-                const correctLabel = document.getElementById(`label_q${index}_opt${qData.ans}`);
-
-                if (selectedInput) {
-                    const selectedValue = parseInt(selectedInput.value);
-                    const selectedLabel = document.getElementById(`label_${selectedInput.id}`);
-
-                    if (selectedValue === qData.ans) {
-                        // Correct Answer
-                        score++;
-                        selectedLabel.classList.add('correct-answer');
+                    // التحقق من الإجابة
+                    if (opt === item.ans) {
+                        // إجابة صحيحة
+                        explanation.classList.add('show', 'exp-correct');
+                        explanation.innerHTML = `✅ <strong>إجابة صحيحة!</strong> أحسنت، الخيار (${opt}) هو الإجابة المطلوبة.`;
                     } else {
-                        // Incorrect Answer
-                        selectedLabel.classList.add('incorrect-answer');
-                        // Highlight the correct one so they know
-                        correctLabel.classList.add('correct-answer');
+                        // إجابة خاطئة
+                        optionDiv.classList.add('wrong'); // تلوين اختيار الطالب بالأحمر
+                        explanation.classList.add('show', 'exp-wrong');
+                        explanation.innerHTML = `❌ <strong>إجابة خاطئة!</strong> الإجابة الصحيحة هي: (${item.ans}).`;
                     }
-                } else {
-                    // Unanswered
-                    correctLabel.classList.add('correct-answer'); // Show them what was correct
-                    const card = document.getElementById(`q-card-${index}`);
-                    card.classList.add('border-red-300', 'bg-red-50'); // Highlight the whole card slightly
-                }
+                };
+                optionsContainer.appendChild(optionDiv);
             });
 
-            // Calculate metrics
-            const percentage = Math.round((score / totalQuestions) * 100);
-            
-            // Update UI
-            document.getElementById('header-score-value').textContent = score;
-            document.getElementById('score-display-header').classList.remove('hidden');
-            
-            document.getElementById('modal-score').textContent = score;
-            document.getElementById('modal-percentage').textContent = `${percentage}%`;
-            
-            // Change Submit button state
-            submitBtn.textContent = 'اكتمل الاختبار';
-            submitBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
-            submitBtn.classList.add('bg-slate-400', 'cursor-not-allowed');
-            submitBtn.disabled = true;
-            hasSubmitted = true;
-
-            // Show Modal
-            resultsModal.classList.remove('hidden');
-        }
-
-        submitBtn.addEventListener('click', () => {
-            // Check if there are unanswered questions
-            const answeredCount = document.querySelectorAll('input[type="radio"]:checked').length;
-            if (answeredCount < questionsData.length) {
-                // We use a custom modal-like confirm instead of alert (but inline logic for simplicity)
-                const confirmed = confirm("لم تقم بالإجابة على جميع الأسئلة. هل أنت متأكد من رغبتك في التسليم؟\n(Unanswered questions will be marked incorrect)");
-                if (!confirmed) return;
-            }
-            
-            evaluateQuiz();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            card.appendChild(optionsContainer);
+            card.appendChild(explanation);
+            container.appendChild(card);
         });
-
-        closeModalBtn.addEventListener('click', () => {
-            resultsModal.classList.add('hidden');
-        });
-
-        // Init
-        renderQuiz();
-
-        // Polyfill/override for confirm as per strict rules (No alert/confirm preferred, replacing native confirm with simple logic if strictly enforced)
-        // Note: I used a native confirm above as a quick fallback, but to adhere STRICTLY to "Never use alert/confirm", I will override it just in case:
-        window.confirm = function(msg) {
-            // Auto accept in this specific sandbox if confirm is blocked, or ideally build a custom modal. 
-            // Since we have an 80 question quiz, let's just let them submit without the block to avoid UI lockups.
-            return true; 
-        };
     </script>
 </body>
 </html>

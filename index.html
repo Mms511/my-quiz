@@ -10,24 +10,75 @@
             --bg: #f3f4f6;
             --card-bg: #ffffff;
             --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --title-color: #111827;
+            --option-bg: #f9fafb;
+            --option-border: #e5e7eb;
+            --option-hover: #f3f4f6;
+            
             --correct-bg: #d1fae5;
             --correct-border: #10b981;
             --correct-text: #065f46;
+            
             --wrong-bg: #fee2e2;
             --wrong-border: #ef4444;
             --wrong-text: #991b1b;
         }
+
+        body.dark-mode {
+            --bg: #111827;
+            --card-bg: #1f2937;
+            --text-main: #f9fafb;
+            --text-muted: #9ca3af;
+            --title-color: #f3f4f6;
+            --option-bg: #374151;
+            --option-border: #4b5563;
+            --option-hover: #4b5563;
+            
+            --correct-bg: #064e3b;
+            --correct-border: #10b981;
+            --correct-text: #a7f3d0;
+            
+            --wrong-bg: #7f1d1d;
+            --wrong-border: #ef4444;
+            --wrong-text: #fca5a5;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg);
             color: var(--text-main);
             margin: 0;
             padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
         }
         .container {
             max-width: 800px;
             margin: 0 auto;
         }
+        
+        .theme-toggle-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+        #theme-toggle {
+            background-color: var(--card-bg);
+            color: var(--text-main);
+            border: 2px solid var(--option-border);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+        #theme-toggle:hover {
+            border-color: var(--primary);
+        }
+
         header {
             text-align: center;
             margin-bottom: 30px;
@@ -37,7 +88,7 @@
             font-size: 2em;
         }
         header p {
-            color: #6b7280;
+            color: var(--text-muted);
             font-size: 1.1em;
             margin-top: 5px;
         }
@@ -49,6 +100,7 @@
             margin-bottom: 24px;
             direction: ltr; /* الأسئلة بالإنجليزية */
             text-align: left;
+            transition: background-color 0.3s;
         }
         .question-header {
             display: flex;
@@ -60,7 +112,7 @@
         .question-title {
             font-size: 1.25em;
             font-weight: 600;
-            color: #111827;
+            color: var(--title-color);
             margin: 0;
             flex-grow: 1;
         }
@@ -71,10 +123,10 @@
             padding: 8px 12px;
             border-radius: 6px;
             cursor: pointer;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: inherit;
             font-size: 0.9em;
             font-weight: bold;
-            display: none; /* مخفي افتراضياً */
+            display: none;
             transition: 0.2s;
             white-space: nowrap;
         }
@@ -88,41 +140,42 @@
         }
         .option {
             padding: 14px 16px;
-            border: 2px solid #e5e7eb;
+            border: 2px solid var(--option-border);
             border-radius: 8px;
             cursor: pointer;
             font-size: 1.05em;
             transition: all 0.2s ease;
-            background-color: #f9fafb;
+            background-color: var(--option-bg);
+            color: var(--text-main);
         }
         .option:hover {
-            background-color: #f3f4f6;
-            border-color: #d1d5db;
+            background-color: var(--option-hover);
+            border-color: #9ca3af;
         }
         .option.disabled {
             pointer-events: none;
         }
         .option.correct {
-            background-color: var(--correct-bg);
-            border-color: var(--correct-border);
-            color: var(--correct-text);
+            background-color: var(--correct-bg) !important;
+            border-color: var(--correct-border) !important;
+            color: var(--correct-text) !important;
             font-weight: bold;
         }
         .option.wrong {
-            background-color: var(--wrong-bg);
-            border-color: var(--wrong-border);
-            color: var(--wrong-text);
+            background-color: var(--wrong-bg) !important;
+            border-color: var(--wrong-border) !important;
+            color: var(--wrong-text) !important;
             font-weight: bold;
         }
+        
         .explanation {
             margin-top: 16px;
             padding: 16px;
             border-radius: 8px;
             display: none;
-            direction: rtl; /* الشرح بالعربية */
-            text-align: right;
-            font-size: 1.1em;
+            font-size: 1.05em;
             animation: fadeIn 0.4s;
+            line-height: 1.6;
         }
         .explanation.show {
             display: block;
@@ -130,13 +183,49 @@
         .exp-correct {
             background-color: var(--correct-bg);
             color: var(--correct-text);
-            border-right: 5px solid var(--correct-border);
+            border-left: 5px solid var(--correct-border);
         }
         .exp-wrong {
             background-color: var(--wrong-bg);
             color: var(--wrong-text);
-            border-right: 5px solid var(--wrong-border);
+            border-left: 5px solid var(--wrong-border);
         }
+        .exp-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        .exp-body {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .exp-ar {
+            direction: rtl;
+            text-align: right;
+            padding: 8px;
+            background-color: rgba(0,0,0,0.03);
+            border-radius: 6px;
+        }
+        .exp-en {
+            direction: ltr;
+            text-align: left;
+            padding: 8px;
+            background-color: rgba(0,0,0,0.03);
+            border-radius: 6px;
+            font-family: Arial, sans-serif;
+        }
+        body.dark-mode .exp-ar, body.dark-mode .exp-en {
+            background-color: rgba(255,255,255,0.05);
+        }
+        body.dark-mode .exp-header {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-5px); }
             to { opacity: 1; transform: translateY(0); }
@@ -146,177 +235,436 @@
 <body>
 
     <div class="container">
+        <!-- زر الوضع الليلي -->
+        <div class="theme-toggle-container">
+            <button id="theme-toggle">🌙 الوضع الداكن</button>
+        </div>
+
         <header>
             <h1>اختبار تقنية المعلومات الشامل</h1>
-            <p>يحتوي على 120 سؤال - اختر الإجابة لتصحيحها فوراً</p>
+            <p>120 سؤال - شرح بالعربي والإنجليزي لكل سؤال</p>
         </header>
         
         <div id="quiz-container"></div>
     </div>
 
     <script>
-        // جميع الأسئلة الـ 120
+        const themeBtn = document.getElementById('theme-toggle');
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if(document.body.classList.contains('dark-mode')) {
+                themeBtn.innerHTML = '☀️ الوضع الفاتح';
+            } else {
+                themeBtn.innerHTML = '🌙 الوضع الداكن';
+            }
+        });
+
+        // قاعدة بيانات الـ 120 سؤال مع الشرح المزدوج
         const quizData = [
-            // المجموعة 1
-            { q: "Which type of computer is the most powerful?", opts: ["PC", "Server", "Mainframe", "Supercomputer"], ans: "Supercomputer" },
-            { q: "A washing machine controller is an example of", opts: ["General-purpose computer", "Personal computer", "Special-purpose computer", "Server"], ans: "Special-purpose computer" },
-            { q: "Which IT professional is responsible for protecting systems from cyber threats", opts: ["Web Developer", "Software Developer", "Security Specialist", "Database Administrator"], ans: "Security Specialist" },
-            { q: "Which skill is essential for IT professionals due to rapid technology changes", opts: ["Problem solving", "Communication", "Lifelong learning", "Teamwork"], ans: "Lifelong learning" },
-            { q: "Which of the following is a network device", opts: ["Router", "Printer", "Monitor", "Scanner"], ans: "Router" },
-            // المجموعة 2
-            { q: "Which of the following is an example of storage", opts: ["Monitor", "SSD", "CPU", "Keyboard"], ans: "SSD" },
-            { q: "Software is defined as", opts: ["Physical parts of a computer", "Internet services", "Programs and instructions that tell a computer what to do", "Computer users"], ans: "Programs and instructions that tell a computer what to do" },
-            { q: "Which type of software manages hardware and provides a platform for applications", opts: ["Application software", "Educational software", "System software", "Multimedia software"], ans: "System software" },
-            { q: "Microsoft Word is an example of", opts: ["System software", "Utility software", "Application software", "Network software"], ans: "Application software" },
-            { q: "A computer network is used mainly to", opts: ["Increase computer speed", "Share information and resources", "Store data only", "Repair computers"], ans: "Share information and resources" },
-            // المجموعة 3
-            { q: "Which stage of the IPOS cycle involves entering data into the computer", opts: ["Processing", "Storage", "Output", "Input"], ans: "Input" },
-            { q: "Which device is considered an input device", opts: ["Monitor", "Printer", "Keyboard", "Speaker"], ans: "Keyboard" },
-            { q: "Which component performs processing in a computer system", opts: ["RAM", "CPU", "Hard disk", "Monitor"], ans: "CPU" },
-            { q: "Which of the following is an output device", opts: ["Scanner", "Mouse", "Speaker", "Keyboard"], ans: "Speaker" },
-            { q: "Saving data for future use is called:", opts: ["Processing", "Output", "Input", "Storage"], ans: "Storage" },
-            // المجموعة 4
-            { q: "What does Information Technology (IT) refer to", opts: ["Only computer programming", "Using computers, systems, data, and people to manage information", "Repairing computer hardware", "Using the Internet for entertainment"], ans: "Using computers, systems, data, and people to manage information" },
-            { q: "Which of the following is NOT a meaning of IT", opts: ["Careers that use computers", "Computer systems and components", "IT staff", "Computer games"], ans: "Computer games" },
-            { q: "A computer system is best defined as", opts: ["A single computer device", "A collection of software only", "A complete set of components working together to process information", "A network connection"], ans: "A complete set of components working together to process information" },
-            { q: "Which component of a computer system refers to physical parts you can touch", opts: ["Software", "Data", "Hardware", "Users"], ans: "Hardware" },
-            { q: "What does IPOS stand for", opts: ["Internet, Processing, Output, System", "Input, Processing, Output, Storage", "Information, Program, Output, Software", "Input, Program, Operating system, Storage"], ans: "Input, Processing, Output, Storage" },
-            // المجموعة 5
-            { q: "Registers are", opts: ["Large and slow memory units", "External storage devices", "Very fast, small memory inside the CPU", "Network components"], ans: "Very fast, small memory inside the CPU" },
-            { q: "The correct order of the instruction cycle is", opts: ["Decode – Fetch – Execute – Store", "Fetch – Decode – Execute – Store", "Execute – Fetch – Store – Decode", "Store – Execute – Decode – Fetch"], ans: "Fetch – Decode – Execute – Store" },
-            { q: "In the instruction cycle, the ALU mainly works during which stage", opts: ["Fetch", "Decode", "Execute", "Store"], ans: "Execute" },
-            { q: "Memory hierarchy is organized based on", opts: ["Color and shape", "Brand and manufacturer", "Speed and size", "Power consumption only"], ans: "Speed and size" },
-            // المجموعة 6
-            { q: "Which is the fastest memory type", opts: ["Secondary storage", "RAM", "Cache", "Registers"], ans: "Registers" },
-            { q: "The system bus is best described as", opts: ["A cooling system", "A communication path between components", "A power cable", "A storage device"], ans: "A communication path between components" },
-            { q: "The data bus is responsible for", opts: ["Carrying control signals", "Carrying memory addresses", "Transferring actual data", "Managing power supply"], ans: "Transferring actual data" },
-            { q: "The address bus carries", opts: ["User passwords", "Memory addresses", "Control instructions", "Graphic data only"], ans: "Memory addresses" },
-            // المجموعة 7
-            { q: "The control bus sends signals such as", opts: ["Numbers and images", "Read and write commands", "Memory capacity", "File names"], ans: "Read and write commands" },
-            { q: "A single-core CPU can", opts: ["Perform unlimited tasks simultaneously", "Execute only one task at a time", "Replace RAM", "Eliminate storage"], ans: "Execute only one task at a time" },
-            { q: "Multi-core architecture improves performance mainly by", opts: ["Increasing monitor size", "Reducing storage capacity", "Allowing multiple tasks to run simultaneously", "Removing the control unit"], ans: "Allowing multiple tasks to run simultaneously" },
-            { q: "Increasing the number of CPU cores generally leads to", opts: ["Slower system performance", "Reduced multitasking capability", "Better multitasking and smoother performance", "Removal of instruction cycles"], ans: "Better multitasking and smoother performance" },
-            // المجموعة 8
-            { q: "What is system architecture", opts: ["A type of operating system", "The overall design of a computer system", "A programming language", "A storage device"], ans: "The overall design of a computer system" },
-            { q: "System architecture describes all of the following EXCEPT", opts: ["System components", "Functions of each component", "Communication between components", "Internet connection speed"], ans: "Internet connection speed" },
-            { q: "One main reason to study system architecture is to", opts: ["Replace hardware daily", "Improve performance and efficiency", "Avoid using software", "Eliminate memory usage"], ans: "Improve performance and efficiency" },
-            { q: "Which of the following is NOT a main component of a computer system", opts: ["CPU", "Memory", "Compiler", "Storage"], ans: "Compiler" },
-            // المجموعة 9
-            { q: "The CPU is commonly described as", opts: ["The storage unit", "The brain of the computer", "The input device", "The power supply"], ans: "The brain of the computer" },
-            { q: "RAM is considered volatile because", opts: ["It is very slow", "It stores data permanently", "Data is lost when power is off", "It cannot store programs"], ans: "Data is lost when power is off" },
-            { q: "Which component stores data permanently", opts: ["Registers", "Cache", "RAM", "Secondary storage"], ans: "Secondary storage" },
-            { q: "The Arithmetic Logic Unit (ALU) is responsible for", opts: ["Controlling input devices", "Performing calculations", "Managing storage devices", "Displaying output"], ans: "Performing calculations" },
-            // المجموعة 10
-            { q: "?What is an operating system", opts: ["A hardware component", "System software that manages hardware", "A programming language", "A network device"], ans: "System software that manages hardware" },
-            { q: "The OS acts as", opts: ["Storage device", "Interface between user and hardware", "Antivirus", "Firewall"], ans: "Interface between user and hardware" },
-            { q: "The kernel is", opts: ["External software", "The central part of the OS", "A user application", "A network tool"], ans: "The central part of the OS" },
-            { q: "The kernel has", opts: ["Limited access", "No control", "Full hardware privileges", "Internet access only"], ans: "Full hardware privileges" },
-            // المجموعة 11
-            { q: "A process is", opts: ["Hardware device", "File system", "Network connection", "Program in execution"], ans: "Program in execution" },
-            { q: "?Which is NOT a process state", opts: ["Ready", "Running", "Waiting", "Installed"], ans: "Installed" },
-            { q: "Multitasking means", opts: ["Multiple programs running seemingly at once", "One program at a time", "No programs", "Only background tasks"], ans: "Multiple programs running seemingly at once" },
-            { q: "Memory management is responsible for", opts: ["Internet speed", "Allocating memory to processes", "Printing files", "Deleting data"], ans: "Allocating memory to processes" },
-            // المجموعة 12
-            { q: "Resource management controls", opts: ["Only memory", "Only CPU", "CPU, storage, and I/O", "Internet only"], ans: "CPU, storage, and I/O" },
-            { q: "Protection and security ensure", opts: ["Faster CPU", "No crashes", "Authorized access only", "More storage"], ans: "Authorized access only" },
-            { q: "Interrupts are", opts: ["Errors", "Signals to the OS", "Files", "Programs"], ans: "Signals to the OS" },
-            { q: "When an interrupt occurs, the OS", opts: ["Shuts down", "Ignores it", "Pauses current process", "Deletes data"], ans: "Pauses current process" },
-            // المجموعة 13
-            { q: "Single-tasking means", opts: ["Many processes", "One process at a time", "No processes", "Background tasks"], ans: "One process at a time" },
-            { q: "Batch processing", opts: ["Runs jobs together without interruption", "Allows interaction", "Runs one task forever", "Uses internet only"], ans: "Runs jobs together without interruption" },
-            { q: "Concurrent processing", opts: ["One task only", "Tasks overlap in execution", "No CPU use", "Only offline tasks"], ans: "Tasks overlap in execution" },
-            { q: "Multiprogramming", opts: ["One program in memory", "No programs", "Multiple programs in memory", "Only games"], ans: "Multiple programs in memory" },
-            // المجموعة 14
-            { q: "Multithreading", opts: ["Multiple CPUs", "Multiple threads in one process", "One thread only", "No execution"], ans: "Multiple threads in one process" },
-            { q: "Multiprocessing uses", opts: ["Multiple CPUs or cores", "One CPU", "No CPU", "RAM only"], ans: "Multiple CPUs or cores" },
-            { q: "Device drivers", opts: ["Hardware devices", "Network cables", "Security tools", "Translate OS commands to hardware"], ans: "Translate OS commands to hardware" },
-            { q: "Booting is", opts: ["Starting the system and loading OS", "Deleting files", "Installing apps", "Running programs"], ans: "Starting the system and loading OS" },
-            // المجموعة 15
-            { q: "?What is a computer network", opts: ["A single computer", "A group of connected computers and resources", "A storage device", "A software program"], ans: "A group of connected computers and resources" },
-            { q: "The main purpose of a network is", opts: ["Communication and resource sharing", "Gaming", "Printing only", "Programming"], ans: "Communication and resource sharing" },
-            { q: "Which is a network benefit", opts: ["No cost", "Sharing data and hardware", "Slower performance", "No security"], ans: "Sharing data and hardware" },
-            { q: "A local computer is", opts: ["Computer used physically by the user", "Remote device", "Server", "Cloud system"], ans: "Computer used physically by the user" },
-            // المجموعة 16
-            { q: "A remote computer is accessed using", opts: ["USB", "Bluetooth only", "Remote Desktop, SSH, Telnet", "Printer"], ans: "Remote Desktop, SSH, Telnet" },
-            { q: "The physical level includes", opts: ["Protocols", "Topology", "Hardware and cables", "Software"], ans: "Hardware and cables" },
-            { q: "The logical level focuses on", opts: ["Hardware", "Structure and topology", "Users", "Storage"], ans: "Structure and topology" },
-            { q: "The software level includes", opts: ["Switches", "Routers", "Protocols and programs", "Cables"], ans: "Protocols and programs" },
-            // المجموعة 17
-            { q: "Bandwidth refers to", opts: ["Distance", "Transfer rate of data", "Device size", "CPU speed"], ans: "Transfer rate of data" },
-            { q: "A hub", opts: ["Connects networks", "Connects multiple computers", "Routes packets", "Stores data"], ans: "Connects multiple computers" },
-            { q: "A switch uses", opts: ["MAC addresses", "IP addresses", "Ports only", "Files"], ans: "MAC addresses" },
-            { q: "A router", opts: ["Connects computers", "Connects multiple networks", "Stores data", "Encrypts data"], ans: "Connects multiple networks" },
-            // المجموعة 18
-            { q: "A gateway", opts: ["Connects same networks", "Stores files", "Connects different types of networks", "Speeds internet"], ans: "Connects different types of networks" },
-            { q: "Network mapping is", opts: ["Programming", "Visual representation of a network", "Security tool", "Storage method"], ans: "Visual representation of a network" },
-            { q: "Which is a step in network mapping", opts: ["Coding", "Data collection", "Deleting files", "Formatting disk"], ans: "Data collection" },
-            { q: "Physical topology shows", opts: ["Data flow", "IP addresses", "Actual layout of devices", "Programs"], ans: "Actual layout of devices" },
-            // المجموعة 19
-            { q: "Logical topology shows", opts: ["Cables only", "Device shape", "Data flow and relationships", "Hardware damage"], ans: "Data flow and relationships" },
-            { q: "Which network is the smallest", opts: ["WAN", "MAN", "LAN", "PAN"], ans: "PAN" },
-            { q: "In Client–Server", opts: ["All devices equal", "Clients respond", "Servers respond to requests", "No communication"], ans: "Servers respond to requests" },
-            { q: "TCP/IP is", opts: ["Hardware", "Network cable", "Communication protocol", "Storage system"], ans: "Communication protocol" },
+            { q: "Which type of computer is the most powerful?", opts: ["PC", "Server", "Mainframe", "Supercomputer"], ans: "Supercomputer", 
+              ar: "الحواسيب الخارقة (Supercomputers) هي الأقوى وتستخدم للعمليات شديدة التعقيد.", 
+              en: "Supercomputers are the most powerful and are used for highly complex operations." },
+            { q: "A washing machine controller is an example of", opts: ["General-purpose computer", "Personal computer", "Special-purpose computer", "Server"], ans: "Special-purpose computer", 
+              ar: "المتحكم في الغسالة مصمم لغرض واحد فقط، لذا يسمى حاسوب خاص الغرض.", 
+              en: "A washing machine controller is designed for a single purpose, hence it is a special-purpose computer." },
+            { q: "Which IT professional is responsible for protecting systems from cyber threats", opts: ["Web Developer", "Software Developer", "Security Specialist", "Database Administrator"], ans: "Security Specialist", 
+              ar: "أخصائي الأمن هو المسؤول المباشر عن الحماية من التهديدات السيبرانية.", 
+              en: "A Security Specialist is directly responsible for protection against cyber threats." },
+            { q: "Which skill is essential for IT professionals due to rapid technology changes", opts: ["Problem solving", "Communication", "Lifelong learning", "Teamwork"], ans: "Lifelong learning", 
+              ar: "التكنولوجيا تتطور بسرعة، لذا التعلم المستمر مدى الحياة مهارة حتمية.", 
+              en: "Technology evolves rapidly, making lifelong learning an essential skill." },
+            { q: "Which of the following is a network device", opts: ["Router", "Printer", "Monitor", "Scanner"], ans: "Router", 
+              ar: "الموجه (Router) هو الجهاز الذي يربط الشبكات ببعضها، البقية أجهزة طرفية.", 
+              en: "A Router connects networks together, while the others are peripheral devices." },
             
-            // الدفعة الجديدة (40 سؤال)
-            { q: "What is a network protocol", opts: ["A set of rules governing data transmission", "A hardware device used for communication", "A type of network cable", "A programming language"], ans: "A set of rules governing data transmission" },
-            { q: "Which component is NOT part of a protocol", opts: ["Format", "Order", "Action", "Bandwidth"], ans: "Bandwidth" },
-            { q: "What happens if two devices use different message formats", opts: ["Data is compressed", "Communication fails", "Speed increases", "Encryption is enabled"], ans: "Communication fails" },
-            { q: "The network edge includes", opts: ["Routers and backbone links", "End systems like laptops and servers", "Only switches", "Fiber cables only"], ans: "End systems like laptops and servers" },
-            { q: "The network core is responsible for", opts: ["Running applications", "User interaction", "Forwarding data across networks", "Generating packets"], ans: "Forwarding data across networks" },
-            { q: "What is the first step when accessing a website", opts: ["Packets are reassembled", "Data is encrypted", "Data is broken into packets", "Router forwards packets"], ans: "Data is broken into packets" },
-            { q: "How many layers are in the TCP/IP model", opts: ["3", "4", "5", "7"], ans: "5" },
-            { q: "Which layer is responsible for user-facing applications", opts: ["Application", "Transport", "Network", "Physical"], ans: "Application" },
-            { q: "Which protocol is used for web communication", opts: ["FTP", "SMTP", "HTTP", "DNS"], ans: "HTTP" },
-            { q: "Which transport protocol is connection-oriented", opts: ["UDP", "TCP", "IP", "HTTP"], ans: "TCP" },
-            { q: "Which protocol is faster but unreliable", opts: ["TCP", "UDP", "HTTP", "FTP"], ans: "UDP" },
-            { q: "The network layer is responsible for", opts: ["Routing packets", "Encryption", "Error detection only", "File transfer"], ans: "Routing packets" },
-            { q: "What does IP provide", opts: ["Reliable delivery", "Encryption", "Addressing and datagram format", "Application services"], ans: "Addressing and datagram format" },
-            { q: "The data link layer handles communication between", opts: ["Distant networks", "Neighboring devices", "Applications", "Servers only"], ans: "Neighboring devices" },
-            { q: "The physical layer deals with", opts: ["Packets", "Frames", "Bits", "Messages"], ans: "Bits" },
-            { q: "Which medium is most resistant to electromagnetic interference", opts: ["Twisted pair", "Wireless", "Fiber optic", "Copper"], ans: "Fiber optic" },
-            { q: "In client-server architecture, the server is", opts: ["Temporary", "Always-on", "Optional", "Mobile"], ans: "Always-on" },
-            { q: "In P2P architecture, peers", opts: ["Only act as clients", "Only act as servers", "Act as both client and server", "Cannot communicate directly"], ans: "Act as both client and server" },
-            { q: "Which architecture has no central server", opts: ["Client-server", "Hybrid", "P2P", "Cloud"], ans: "P2P" },
-            { q: "Which attack targets the transport layer", opts: ["SQL Injection", "SYN Flood", "IP Spoofing", "ARP Spoofing"], ans: "SYN Flood" },
-            { q: "What is the primary function of a switch in a LAN", opts: ["Connect different networks", "Assign IP addresses", "Forward frames using MAC addresses", "Encrypt data"], ans: "Forward frames using MAC addresses" },
-            { q: "A router mainly operates at which OSI layer", opts: ["Data Link Layer", "Network Layer", "Transport Layer", "Application Layer"], ans: "Network Layer" },
-            { q: "Which component allows a device to physically connect to a network", opts: ["Router", "Switch", "Firewall", "Network Interface Card (NIC)"], ans: "Network Interface Card (NIC)" },
-            { q: "A LAN is best described as", opts: ["A global network", "A private network in a limited area", "A wireless-only system", "A cloud-based system"], ans: "A private network in a limited area" },
-            { q: "Packet sniffing refers to", opts: ["Blocking network traffic", "Encrypting packets", "Monitoring network traffic secretly", "Deleting packets"], ans: "Monitoring network traffic secretly" },
-            { q: "ARP poisoning is mainly used to perform", opts: ["Data backup", "Firewall configuration", "Software updates", "Man-in-the-Middle attack"], ans: "Man-in-the-Middle attack" },
-            { q: "The Internet is an example of", opts: ["LAN", "WLAN", "WAN", "PAN"], ans: "WAN" },
-            { q: "Which protocol is responsible for addressing and routing packets", opts: ["TCP", "UDP", "DNS", "IP"], ans: "IP" },
-            { q: "Which protocol ensures reliable data delivery", opts: ["UDP", "IP", "TCP", "DNS"], ans: "TCP" },
-            { q: "The TCP 3-way handshake begins with", opts: ["ACK", "SYN", "SYN-ACK", "FIN"], ans: "SYN" },
-            { q: "UDP is preferred in which scenario", opts: ["Secure email transfer", "File downloads", "Video streaming", "Banking transactions"], ans: "Video streaming" },
-            { q: "DNS is mainly used to", opts: ["Encrypt traffic", "Translate domain names to IP addresses", "Block attacks", "Monitor traffic"], ans: "Translate domain names to IP addresses" },
-            { q: "A DDoS attack aims to", opts: ["Encrypt data", "Improve performance", "Authenticate users", "Overwhelm a service with traffic"], ans: "Overwhelm a service with traffic" },
-            { q: "IP spoofing involves", opts: ["Blocking ports", "Changing MAC address", "Forging source IP address", "Encrypting packets"], ans: "Forging source IP address" },
-            { q: "A firewall is used to", opts: ["Increase bandwidth", "Control network traffic", "Store data", "Assign IP addresses"], ans: "Control network traffic" },
-            { q: "Wireless networks transmit data using", opts: ["Fiber optics", "Copper cables", "Radio waves", "Satellites only"], ans: "Radio waves" },
-            { q: "The SSID represents", opts: ["IP address", "Network speed", "Encryption type", "Network name"], ans: "Network name" },
-            { q: "Which wireless protocol is considered insecure today", opts: ["WPA3", "WPA2", "WPA", "WEP"], ans: "WEP" },
-            { q: "An “Evil Twin” attack involves", opts: ["Encrypting Wi-Fi", "Creating a fake access point", "Blocking users", "Updating firmware"], ans: "Creating a fake access point" },
-            { q: "AP Isolation is used to", opts: ["Increase signal strength", "Connect multiple networks", "Prevent devices from communicating with each other", "Speed up internet"], ans: "Prevent devices from communicating with each other" }
+            { q: "Which of the following is an example of storage", opts: ["Monitor", "SSD", "CPU", "Keyboard"], ans: "SSD", 
+              ar: "قرص الحالة الصلبة (SSD) هو وحدة التخزين، بينما البقية معالجة وإدخال/إخراج.", 
+              en: "An SSD is a storage unit, while the rest are processing and I/O devices." },
+            { q: "Software is defined as", opts: ["Physical parts of a computer", "Internet services", "Programs and instructions that tell a computer what to do", "Computer users"], ans: "Programs and instructions that tell a computer what to do", 
+              ar: "البرمجيات هي التعليمات والأوامر التي توجه المكونات المادية.", 
+              en: "Software refers to the programs and instructions that guide the hardware." },
+            { q: "Which type of software manages hardware and provides a platform for applications", opts: ["Application software", "Educational software", "System software", "Multimedia software"], ans: "System software", 
+              ar: "برمجيات النظام (مثل نظام التشغيل) تدير العتاد وتوفر بيئة للتطبيقات.", 
+              en: "System software (like an OS) manages hardware and provides a platform for apps." },
+            { q: "Microsoft Word is an example of", opts: ["System software", "Utility software", "Application software", "Network software"], ans: "Application software", 
+              ar: "برنامج وورد هو تطبيق صُمم ليؤدي وظيفة معينة للمستخدم.", 
+              en: "Word is an application software designed to perform a specific task for the user." },
+            { q: "A computer network is used mainly to", opts: ["Increase computer speed", "Share information and resources", "Store data only", "Repair computers"], ans: "Share information and resources", 
+              ar: "الهدف الرئيسي للشبكات هو مشاركة البيانات والموارد كالملفات والطابعات.", 
+              en: "The main goal of networks is to share data and resources like files and printers." },
+            
+            { q: "Which stage of the IPOS cycle involves entering data into the computer", opts: ["Processing", "Storage", "Output", "Input"], ans: "Input", 
+              ar: "مرحلة الإدخال هي المرحلة التي يتم فيها إدخال البيانات للجهاز.", 
+              en: "The Input stage is where data is entered into the system." },
+            { q: "Which device is considered an input device", opts: ["Monitor", "Printer", "Keyboard", "Speaker"], ans: "Keyboard", 
+              ar: "لوحة المفاتيح تُستخدم للإدخال، البقية هي أجهزة إخراج.", 
+              en: "A keyboard is used for input, while the others are output devices." },
+            { q: "Which component performs processing in a computer system", opts: ["RAM", "CPU", "Hard disk", "Monitor"], ans: "CPU", 
+              ar: "المعالج المركزي (CPU) هو الذي يقوم بجميع عمليات المعالجة.", 
+              en: "The Central Processing Unit (CPU) performs all processing operations." },
+            { q: "Which of the following is an output device", opts: ["Scanner", "Mouse", "Speaker", "Keyboard"], ans: "Speaker", 
+              ar: "السماعات تُخرج الصوت، بينما الماوس والماسح ولوحة المفاتيح أجهزة إدخال.", 
+              en: "Speakers output sound, while mice, scanners, and keyboards are input devices." },
+            { q: "Saving data for future use is called:", opts: ["Processing", "Output", "Input", "Storage"], ans: "Storage", 
+              ar: "حفظ البيانات لاستخدامها لاحقاً يُسمى التخزين.", 
+              en: "Saving data for future use is called Storage." },
+            
+            { q: "What does Information Technology (IT) refer to", opts: ["Only computer programming", "Using computers, systems, data, and people to manage information", "Repairing computer hardware", "Using the Internet for entertainment"], ans: "Using computers, systems, data, and people to manage information", 
+              ar: "تقنية المعلومات مفهوم شامل يتضمن إدارة الأنظمة والبيانات والأفراد.", 
+              en: "IT is a comprehensive concept involving the management of systems, data, and people." },
+            { q: "Which of the following is NOT a meaning of IT", opts: ["Careers that use computers", "Computer systems and components", "IT staff", "Computer games"], ans: "Computer games", 
+              ar: "ألعاب الكمبيوتر هي منتج ترفيهي وليست تعريفاً لتقنية المعلومات.", 
+              en: "Computer games are entertainment products, not a definition of IT." },
+            { q: "A computer system is best defined as", opts: ["A single computer device", "A collection of software only", "A complete set of components working together to process information", "A network connection"], ans: "A complete set of components working together to process information", 
+              ar: "نظام الحاسب هو مجموعة متكاملة من العتاد والبرمجيات تعمل معاً لمعالجة البيانات.", 
+              en: "A computer system is an integrated set of hardware and software working together to process data." },
+            { q: "Which component of a computer system refers to physical parts you can touch", opts: ["Software", "Data", "Hardware", "Users"], ans: "Hardware", 
+              ar: "المكونات المادية (Hardware) هي أي قطعة ملموسة في الحاسب.", 
+              en: "Hardware refers to any physical, tangible part of the computer." },
+            { q: "What does IPOS stand for", opts: ["Internet, Processing, Output, System", "Input, Processing, Output, Storage", "Information, Program, Output, Software", "Input, Program, Operating system, Storage"], ans: "Input, Processing, Output, Storage", 
+              ar: "دورة معالجة المعلومات تتكون من: إدخال، معالجة، إخراج، وتخزين.", 
+              en: "The information processing cycle consists of: Input, Processing, Output, and Storage." },
+            
+            { q: "Registers are", opts: ["Large and slow memory units", "External storage devices", "Very fast, small memory inside the CPU", "Network components"], ans: "Very fast, small memory inside the CPU", 
+              ar: "المسجلات هي وحدات ذاكرة صغيرة جداً وسريعة للغاية داخل المعالج نفسه.", 
+              en: "Registers are very small, extremely fast memory units located inside the CPU." },
+            { q: "The correct order of the instruction cycle is", opts: ["Decode – Fetch – Execute – Store", "Fetch – Decode – Execute – Store", "Execute – Fetch – Store – Decode", "Store – Execute – Decode – Fetch"], ans: "Fetch – Decode – Execute – Store", 
+              ar: "الدورة تبدأ بالجلب، الفك، التنفيذ، ثم التخزين.", 
+              en: "The cycle starts with Fetch, then Decode, Execute, and finally Store." },
+            { q: "In the instruction cycle, the ALU mainly works during which stage", opts: ["Fetch", "Decode", "Execute", "Store"], ans: "Execute", 
+              ar: "وحدة الحساب والمنطق تقوم بالعمليات خلال مرحلة التنفيذ.", 
+              en: "The Arithmetic Logic Unit (ALU) performs calculations during the Execute stage." },
+            { q: "Memory hierarchy is organized based on", opts: ["Color and shape", "Brand and manufacturer", "Speed and size", "Power consumption only"], ans: "Speed and size", 
+              ar: "هرم الذاكرة يعتمد على السرعة والحجم.", 
+              en: "The memory hierarchy is based on speed and size." },
+            
+            { q: "Which is the fastest memory type", opts: ["Secondary storage", "RAM", "Cache", "Registers"], ans: "Registers", 
+              ar: "المسجلات هي الأسرع لقربها الشديد من قلب المعالج.", 
+              en: "Registers are the absolute fastest memory due to their location inside the CPU core." },
+            { q: "The system bus is best described as", opts: ["A cooling system", "A communication path between components", "A power cable", "A storage device"], ans: "A communication path between components", 
+              ar: "ناقل النظام هو مسار الاتصال الذي ينقل البيانات بين مكونات اللوحة الأم.", 
+              en: "The system bus is the communication pathway that transfers data between motherboard components." },
+            { q: "The data bus is responsible for", opts: ["Carrying control signals", "Carrying memory addresses", "Transferring actual data", "Managing power supply"], ans: "Transferring actual data", 
+              ar: "ناقل البيانات ينقل البيانات الفعلية، بينما ناقل العناوين ينقل المواقع.", 
+              en: "The data bus transfers actual data, while the address bus transfers locations." },
+            { q: "The address bus carries", opts: ["User passwords", "Memory addresses", "Control instructions", "Graphic data only"], ans: "Memory addresses", 
+              ar: "ناقل العناوين مخصص لنقل عناوين مواقع الذاكرة المطلوبة.", 
+              en: "The address bus is dedicated solely to carrying requested memory addresses." },
+            
+            { q: "The control bus sends signals such as", opts: ["Numbers and images", "Read and write commands", "Memory capacity", "File names"], ans: "Read and write commands", 
+              ar: "ناقل التحكم يُرسل إشارات الأوامر مثل 'قراءة' أو 'كتابة'.", 
+              en: "The control bus sends command signals like 'Read' or 'Write'." },
+            { q: "A single-core CPU can", opts: ["Perform unlimited tasks simultaneously", "Execute only one task at a time", "Replace RAM", "Eliminate storage"], ans: "Execute only one task at a time", 
+              ar: "المعالج أحادي النواة يعالج تعليمة واحدة فقط في نفس اللحظة.", 
+              en: "A single-core processor processes only one instruction at a time." },
+            { q: "Multi-core architecture improves performance mainly by", opts: ["Increasing monitor size", "Reducing storage capacity", "Allowing multiple tasks to run simultaneously", "Removing the control unit"], ans: "Allowing multiple tasks to run simultaneously", 
+              ar: "تعدد الأنوية يسمح للمعالج بتنفيذ عدة مهام في نفس الوقت الحقيقي.", 
+              en: "Multiple cores allow the processor to execute several tasks simultaneously in real-time." },
+            { q: "Increasing the number of CPU cores generally leads to", opts: ["Slower system performance", "Reduced multitasking capability", "Better multitasking and smoother performance", "Removal of instruction cycles"], ans: "Better multitasking and smoother performance", 
+              ar: "زيادة الأنوية تحسن قدرة الجهاز على تعدد المهام بسلاسة.", 
+              en: "Increasing cores significantly improves the device's ability to multitask smoothly." },
+            
+            { q: "What is system architecture", opts: ["A type of operating system", "The overall design of a computer system", "A programming language", "A storage device"], ans: "The overall design of a computer system", 
+              ar: "معمارية النظام هي التصميم الهيكلي العام الذي يربط مكونات الحاسب.", 
+              en: "System architecture is the overall structural design that connects computer components." },
+            { q: "System architecture describes all of the following EXCEPT", opts: ["System components", "Functions of each component", "Communication between components", "Internet connection speed"], ans: "Internet connection speed", 
+              ar: "سرعة الإنترنت تعتمد على الشبكة وليس المعمارية الداخلية.", 
+              en: "Internet speed depends on the network, not the internal system architecture." },
+            { q: "One main reason to study system architecture is to", opts: ["Replace hardware daily", "Improve performance and efficiency", "Avoid using software", "Eliminate memory usage"], ans: "Improve performance and efficiency", 
+              ar: "فهم المعمارية يساعد المطورين على كتابة برامج أكثر كفاءة وسرعة.", 
+              en: "Understanding architecture helps developers write more efficient and faster programs." },
+            { q: "Which of the following is NOT a main component of a computer system", opts: ["CPU", "Memory", "Compiler", "Storage"], ans: "Compiler", 
+              ar: "المترجم (Compiler) برنامج، وليس مكوناً رئيسياً (هاردوير) للحاسب.", 
+              en: "A compiler is a software program, not a main physical hardware component." },
+            
+            { q: "The CPU is commonly described as", opts: ["The storage unit", "The brain of the computer", "The input device", "The power supply"], ans: "The brain of the computer", 
+              ar: "المعالج يُوصف بأنه 'عقل الحاسب' لأنه يتحكم بجميع العمليات.", 
+              en: "The CPU is called the 'brain' because it manages and controls all operations." },
+            { q: "RAM is considered volatile because", opts: ["It is very slow", "It stores data permanently", "Data is lost when power is off", "It cannot store programs"], ans: "Data is lost when power is off", 
+              ar: "الذاكرة متطايرة (Volatile) أي تفقد محتوياتها عند انقطاع التيار الكهربائي.", 
+              en: "Volatile memory loses its contents as soon as the power is turned off." },
+            { q: "Which component stores data permanently", opts: ["Registers", "Cache", "RAM", "Secondary storage"], ans: "Secondary storage", 
+              ar: "التخزين الثانوي (كالقرص الصلب) يحتفظ بالبيانات بشكل دائم.", 
+              en: "Secondary storage (like a hard drive) retains data permanently even without power." },
+            { q: "The Arithmetic Logic Unit (ALU) is responsible for", opts: ["Controlling input devices", "Performing calculations", "Managing storage devices", "Displaying output"], ans: "Performing calculations", 
+              ar: "الـ ALU مسؤول عن إجراء العمليات الحسابية والمنطقية.", 
+              en: "The primary responsibility of the ALU is to perform arithmetic and logical operations." },
+            
+            { q: "?What is an operating system", opts: ["A hardware component", "System software that manages hardware", "A programming language", "A network device"], ans: "System software that manages hardware", 
+              ar: "نظام التشغيل هو البرنامج الذي يدير العتاد ويسير النظام.", 
+              en: "The operating system is the core software that manages hardware and runs the device." },
+            { q: "The OS acts as", opts: ["Storage device", "Interface between user and hardware", "Antivirus", "Firewall"], ans: "Interface between user and hardware", 
+              ar: "النظام يعمل كواجهة تسهل على المستخدم التعامل مع أجزاء الحاسب المعقدة.", 
+              en: "The OS acts as an interface to make it easier for users to interact with complex hardware." },
+            { q: "The kernel is", opts: ["External software", "The central part of the OS", "A user application", "A network tool"], ans: "The central part of the OS", 
+              ar: "النواة هي الجزء المركزي والأساسي لأي نظام تشغيل.", 
+              en: "The Kernel is the beating heart and central core of any operating system." },
+            { q: "The kernel has", opts: ["Limited access", "No control", "Full hardware privileges", "Internet access only"], ans: "Full hardware privileges", 
+              ar: "النواة تمتلك صلاحيات كاملة للتحكم في جميع أجزاء الهاردوير.", 
+              en: "The kernel has complete and direct privileges to control all hardware components." },
+            
+            { q: "A process is", opts: ["Hardware device", "File system", "Network connection", "Program in execution"], ans: "Program in execution", 
+              ar: "العملية (Process) هي ببساطة برنامج في حالة التنفيذ.", 
+              en: "A process is simply any program that is currently running and being executed." },
+            { q: "?Which is NOT a process state", opts: ["Ready", "Running", "Waiting", "Installed"], ans: "Installed", 
+              ar: "التثبيت (Installed) حالة للتخزين، وليست حالة تنفيذ بالمعالج.", 
+              en: "'Installed' is a storage state, not an execution state of a process." },
+            { q: "Multitasking means", opts: ["Multiple programs running seemingly at once", "One program at a time", "No programs", "Only background tasks"], ans: "Multiple programs running seemingly at once", 
+              ar: "تعدد المهام يتيح تشغيل عدة تطبيقات لتبدو وكأنها تعمل معاً.", 
+              en: "Multitasking allows running multiple apps so they appear to run simultaneously." },
+            { q: "Memory management is responsible for", opts: ["Internet speed", "Allocating memory to processes", "Printing files", "Deleting data"], ans: "Allocating memory to processes", 
+              ar: "إدارة الذاكرة تقوم بتوزيع مساحات الرام على البرامج العاملة.", 
+              en: "Memory management allocates portions of RAM to running programs." },
+            
+            { q: "Resource management controls", opts: ["Only memory", "Only CPU", "CPU, storage, and I/O", "Internet only"], ans: "CPU, storage, and I/O", 
+              ar: "إدارة الموارد تتحكم بالمعالج، التخزين، والإدخال/الإخراج.", 
+              en: "Resource management controls the CPU, storage, and I/O devices to ensure orderly operation." },
+            { q: "Protection and security ensure", opts: ["Faster CPU", "No crashes", "Authorized access only", "More storage"], ans: "Authorized access only", 
+              ar: "الحماية تضمن أن الأشخاص المصرح لهم فقط يمكنهم الوصول للبيانات.", 
+              en: "Security ensures that only authorized individuals can access data." },
+            { q: "Interrupts are", opts: ["Errors", "Signals to the OS", "Files", "Programs"], ans: "Signals to the OS", 
+              ar: "المقاطعات إشارات تنبيه لنظام التشغيل للتعامل مع أمر طارئ.", 
+              en: "Interrupts are alert signals sent to the OS to pause current work and handle an urgent event." },
+            { q: "When an interrupt occurs, the OS", opts: ["Shuts down", "Ignores it", "Pauses current process", "Deletes data"], ans: "Pauses current process", 
+              ar: "عند حدوث مقاطعة، يوقف النظام مؤقتاً العملية الحالية للتعامل معها.", 
+              en: "When an interrupt occurs, the OS temporarily pauses the current process to handle the new event." },
+            
+            { q: "Single-tasking means", opts: ["Many processes", "One process at a time", "No processes", "Background tasks"], ans: "One process at a time", 
+              ar: "نظام أحادي المهمة يسمح بتشغيل برنامج واحد فقط في كل مرة.", 
+              en: "A single-tasking system allows only one program to run at a time." },
+            { q: "Batch processing", opts: ["Runs jobs together without interruption", "Allows interaction", "Runs one task forever", "Uses internet only"], ans: "Runs jobs together without interruption", 
+              ar: "معالجة الدفعات تنفذ مجموعة مهام متسلسلة دفعة واحدة دون تدخل.", 
+              en: "Batch processing executes a series of tasks sequentially without user intervention." },
+            { q: "Concurrent processing", opts: ["One task only", "Tasks overlap in execution", "No CPU use", "Only offline tasks"], ans: "Tasks overlap in execution", 
+              ar: "المعالجة المتزامنة تجعل المهام تتداخل لتبدو وكأنها تعمل معاً.", 
+              en: "Concurrent processing overlaps tasks during processing time so they seem to run together." },
+            { q: "Multiprogramming", opts: ["One program in memory", "No programs", "Multiple programs in memory", "Only games"], ans: "Multiple programs in memory", 
+              ar: "البرمجة المتعددة تعني إبقاء عدة برامج جاهزة في ذاكرة الرام.", 
+              en: "Multiprogramming means keeping multiple programs ready to run in RAM." },
+            
+            { q: "Multithreading", opts: ["Multiple CPUs", "Multiple threads in one process", "One thread only", "No execution"], ans: "Multiple threads in one process", 
+              ar: "تعدد المسارات يسمح للبرنامج الواحد بأداء عدة مهام فرعية.", 
+              en: "Multithreading allows a single program to perform multiple sub-tasks simultaneously." },
+            { q: "Multiprocessing uses", opts: ["Multiple CPUs or cores", "One CPU", "No CPU", "RAM only"], ans: "Multiple CPUs or cores", 
+              ar: "المعالجة المتعددة تعني استخدام أكثر من معالج لزيادة الأداء.", 
+              en: "Multiprocessing means using more than one processor or core to increase performance." },
+            { q: "Device drivers", opts: ["Hardware devices", "Network cables", "Security tools", "Translate OS commands to hardware"], ans: "Translate OS commands to hardware", 
+              ar: "برامج التعريف هي المترجم الذي يُفهم العتاد أوامر النظام.", 
+              en: "Device drivers are translators that make hardware understand OS commands." },
+            { q: "Booting is", opts: ["Starting the system and loading OS", "Deleting files", "Installing apps", "Running programs"], ans: "Starting the system and loading OS", 
+              ar: "الإقلاع هي عملية تشغيل الجهاز وتحميل نظام التشغيل للذاكرة.", 
+              en: "Booting is the process of turning on the device and loading the OS into memory." },
+            
+            { q: "?What is a computer network", opts: ["A single computer", "A group of connected computers and resources", "A storage device", "A software program"], ans: "A group of connected computers and resources", 
+              ar: "الشبكة هي مجموعة حواسيب متصلة لتبادل البيانات.", 
+              en: "A network is a group of connected computers and resources to exchange data." },
+            { q: "The main purpose of a network is", opts: ["Communication and resource sharing", "Gaming", "Printing only", "Programming"], ans: "Communication and resource sharing", 
+              ar: "التواصل ومشاركة الموارد هو الغرض الأساسي للشبكة.", 
+              en: "Communication and sharing resources is the primary purpose of a network." },
+            { q: "Which is a network benefit", opts: ["No cost", "Sharing data and hardware", "Slower performance", "No security"], ans: "Sharing data and hardware", 
+              ar: "من فوائد الشبكة توفير التكاليف عبر مشاركة الأجهزة والبيانات.", 
+              en: "A major benefit of networks is cost savings through sharing physical devices and data." },
+            { q: "A local computer is", opts: ["Computer used physically by the user", "Remote device", "Server", "Cloud system"], ans: "Computer used physically by the user", 
+              ar: "الحاسب المحلي هو الجهاز الذي تستخدمه بشكل مباشر ومادي.", 
+              en: "A local computer is the device you sit in front of and use directly." },
+            
+            { q: "A remote computer is accessed using", opts: ["USB", "Bluetooth only", "Remote Desktop, SSH, Telnet", "Printer"], ans: "Remote Desktop, SSH, Telnet", 
+              ar: "للتحكم بحاسب بعيد نستخدم تطبيقات سطح المكتب البعيد أو SSH.", 
+              en: "To control a remote computer, we use remote desktop protocols or SSH." },
+            { q: "The physical level includes", opts: ["Protocols", "Topology", "Hardware and cables", "Software"], ans: "Hardware and cables", 
+              ar: "المستوى المادي للشبكة يضم الكابلات والموجهات.", 
+              en: "The physical level of a network includes tangible parts like cables and routers." },
+            { q: "The logical level focuses on", opts: ["Hardware", "Structure and topology", "Users", "Storage"], ans: "Structure and topology", 
+              ar: "المستوى المنطقي يركز على طريقة هيكلة الشبكة وتدفق البيانات.", 
+              en: "The logical level focuses on how the network is structured and how data flows." },
+            { q: "The software level includes", opts: ["Switches", "Routers", "Protocols and programs", "Cables"], ans: "Protocols and programs", 
+              ar: "المستوى البرمجي يختص بالبرامج والبروتوكولات التي تدير نقل البيانات.", 
+              en: "The software level deals with the programs and protocols that manage data transfer." },
+            
+            { q: "Bandwidth refers to", opts: ["Distance", "Transfer rate of data", "Device size", "CPU speed"], ans: "Transfer rate of data", 
+              ar: "النطاق الترددي يعبر عن سرعة ومعدل نقل البيانات.", 
+              en: "Bandwidth represents the speed and rate of data transfer across a network." },
+            { q: "A hub", opts: ["Connects networks", "Connects multiple computers", "Routes packets", "Stores data"], ans: "Connects multiple computers", 
+              ar: "الموزع (Hub) يربط عدة أجهزة داخل نفس الشبكة المحلية.", 
+              en: "A Hub connects multiple devices within the same local network." },
+            { q: "A switch uses", opts: ["MAC addresses", "IP addresses", "Ports only", "Files"], ans: "MAC addresses", 
+              ar: "المبدل يوجه البيانات باستخدام العنوان الفيزيائي للأجهزة (MAC).", 
+              en: "A Switch smartly routes data using the physical MAC address of devices." },
+            { q: "A router", opts: ["Connects computers", "Connects multiple networks", "Stores data", "Encrypts data"], ans: "Connects multiple networks", 
+              ar: "الموجه يربط شبكات مختلفة ويوجه مسار حزم البيانات.", 
+              en: "A Router connects different networks together and directs data packets." },
+            
+            { q: "A gateway", opts: ["Connects same networks", "Stores files", "Connects different types of networks", "Speeds internet"], ans: "Connects different types of networks", 
+              ar: "البوابة تستخدم لربط شبكتين تعملان بأنظمة مختلفة.", 
+              en: "A Gateway is used to connect two networks operating on completely different protocols." },
+            { q: "Network mapping is", opts: ["Programming", "Visual representation of a network", "Security tool", "Storage method"], ans: "Visual representation of a network", 
+              ar: "رسم الخرائط الشبكية هو التوضيح المرئي لكيفية اتصال الأجهزة.", 
+              en: "Network mapping is the visual representation of how devices are connected." },
+            { q: "Which is a step in network mapping", opts: ["Coding", "Data collection", "Deleting files", "Formatting disk"], ans: "Data collection", 
+              ar: "جمع البيانات هو الخطوة الأولى لرسم خريطة الشبكة.", 
+              en: "Collecting data about devices is the first step in drawing a network map." },
+            { q: "Physical topology shows", opts: ["Data flow", "IP addresses", "Actual layout of devices", "Programs"], ans: "Actual layout of devices", 
+              ar: "الطبولوجيا المادية توضح التوزيع الفعلي للأجهزة والكابلات.", 
+              en: "Physical topology shows the actual layout of devices and cables." },
+            
+            { q: "Logical topology shows", opts: ["Cables only", "Device shape", "Data flow and relationships", "Hardware damage"], ans: "Data flow and relationships", 
+              ar: "الطبولوجيا المنطقية توضح كيف تتدفق البيانات بين الأجهزة فعلياً.", 
+              en: "Logical topology shows how data actually flows between devices." },
+            { q: "Which network is the smallest", opts: ["WAN", "MAN", "LAN", "PAN"], ans: "PAN", 
+              ar: "الشبكة الشخصية (PAN) مثل البلوتوث هي الأصغر نطاقاً.", 
+              en: "A PAN (Personal Area Network) is the smallest network, like Bluetooth." },
+            { q: "In Client–Server", opts: ["All devices equal", "Clients respond", "Servers respond to requests", "No communication"], ans: "Servers respond to requests", 
+              ar: "في هذه البنية، العميل يطلب الخدمات، والخادم يلبي الطلب.", 
+              en: "Clients request services, and the Server fulfills the request." },
+            { q: "TCP/IP is", opts: ["Hardware", "Network cable", "Communication protocol", "Storage system"], ans: "Communication protocol", 
+              ar: "TCP/IP هو بروتوكول الاتصال الأساسي للإنترنت.", 
+              en: "TCP/IP is the fundamental communication protocol that the Internet relies on." },
+
+            { q: "What is a network protocol", opts: ["A set of rules governing data transmission", "A hardware device used for communication", "A type of network cable", "A programming language"], ans: "A set of rules governing data transmission", 
+              ar: "البروتوكول مجموعة قواعد تحدد كيف تتواصل الأجهزة.", 
+              en: "A protocol is a set of rules that defines how devices communicate." },
+            { q: "Which component is NOT part of a protocol", opts: ["Format", "Order", "Action", "Bandwidth"], ans: "Bandwidth", 
+              ar: "الباندويث هو سرعة النقل وليس من خصائص البروتوكول.", 
+              en: "Bandwidth is transfer speed, while a protocol deals with message formats and rules." },
+            { q: "What happens if two devices use different message formats", opts: ["Data is compressed", "Communication fails", "Speed increases", "Encryption is enabled"], ans: "Communication fails", 
+              ar: "إذا اختلفت البروتوكولات، لن تفهم الأجهزة بعضها وسيفشل الاتصال.", 
+              en: "If formats differ, devices won't understand each other and communication fails." },
+            { q: "The network edge includes", opts: ["Routers and backbone links", "End systems like laptops and servers", "Only switches", "Fiber cables only"], ans: "End systems like laptops and servers", 
+              ar: "حافة الشبكة تضم أجهزة المستخدمين كالهواتف واللاب توب.", 
+              en: "The network edge includes end-user devices like phones and laptops." },
+            
+            { q: "The network core is responsible for", opts: ["Running applications", "User interaction", "Forwarding data across networks", "Generating packets"], ans: "Forwarding data across networks", 
+              ar: "قلب الشبكة يوجه البيانات عبر المسارات لضمان وصولها.", 
+              en: "The network core contains routers that forward data across paths." },
+            { q: "What is the first step when accessing a website", opts: ["Packets are reassembled", "Data is encrypted", "Data is broken into packets", "Router forwards packets"], ans: "Data is broken into packets", 
+              ar: "البيانات تُقسم أولاً لحزم صغيرة لتسهيل نقلها عبر الشبكة.", 
+              en: "Data is first broken down into small packets to facilitate transfer." },
+            { q: "How many layers are in the TCP/IP model", opts: ["3", "4", "5", "7"], ans: "5", 
+              ar: "نموذج TCP/IP الحديث يتكون من 5 طبقات أساسية.", 
+              en: "The modern TCP/IP model consists of 5 main layers." },
+            { q: "Which layer is responsible for user-facing applications", opts: ["Application", "Transport", "Network", "Physical"], ans: "Application", 
+              ar: "طبقة التطبيقات توفر الواجهة التي يتعامل معها المستخدم.", 
+              en: "The Application layer provides the interface that the user interacts with." },
+            
+            { q: "Which protocol is used for web communication", opts: ["FTP", "SMTP", "HTTP", "DNS"], ans: "HTTP", 
+              ar: "بروتوكول HTTP يُستخدم لتصفح الإنترنت ونقل صفحات الويب.", 
+              en: "The HTTP protocol is used for transferring web pages and browsing." },
+            { q: "Which transport protocol is connection-oriented", opts: ["UDP", "TCP", "IP", "HTTP"], ans: "TCP", 
+              ar: "بروتوكول TCP يتطلب تأسيس اتصال لضمان وصول البيانات.", 
+              en: "TCP requires establishing a connection beforehand to ensure reliable delivery." },
+            { q: "Which protocol is faster but unreliable", opts: ["TCP", "UDP", "HTTP", "FTP"], ans: "UDP", 
+              ar: "بروتوكول UDP يرسل بسرعة دون التحقق من وصول البيانات.", 
+              en: "UDP sends data quickly without verifying delivery, making it unreliable." },
+            { q: "The network layer is responsible for", opts: ["Routing packets", "Encryption", "Error detection only", "File transfer"], ans: "Routing packets", 
+              ar: "طبقة الشبكة وظيفتها توجيه الحزم واختيار أفضل مسار.", 
+              en: "The Network layer is responsible for routing packets and choosing the best path." },
+            
+            { q: "What does IP provide", opts: ["Reliable delivery", "Encryption", "Addressing and datagram format", "Application services"], ans: "Addressing and datagram format", 
+              ar: "بروتوكول IP يوفر العناوين ويحدد صيغة حزمة البيانات.", 
+              en: "The IP protocol provides addresses and defines the format of the datagram." },
+            { q: "The data link layer handles communication between", opts: ["Distant networks", "Neighboring devices", "Applications", "Servers only"], ans: "Neighboring devices", 
+              ar: "طبقة ربط البيانات تنقل البيانات بين الأجهزة المتجاورة.", 
+              en: "The Data Link layer handles data transfer between adjacent devices." },
+            { q: "The physical layer deals with", opts: ["Packets", "Frames", "Bits", "Messages"], ans: "Bits", 
+              ar: "الطبقة الفيزيائية تتعامل مع الإشارات المتمثلة بالبتات (0,1).", 
+              en: "The Physical layer deals with signals represented as Bits (0,1)." },
+            { q: "Which medium is most resistant to electromagnetic interference", opts: ["Twisted pair", "Wireless", "Fiber optic", "Copper"], ans: "Fiber optic", 
+              ar: "الألياف الضوئية تستخدم الضوء، لذا لا تتأثر بالتداخل الكهرومغناطيسي.", 
+              en: "Fiber optic cables use light, so they are immune to electromagnetic interference." },
+            
+            { q: "In client-server architecture, the server is", opts: ["Temporary", "Always-on", "Optional", "Mobile"], ans: "Always-on", 
+              ar: "الخادم يجب أن يكون متصلاً دائماً لتلبية طلبات العملاء.", 
+              en: "The server must be always-on to fulfill client requests at any time." },
+            { q: "In P2P architecture, peers", opts: ["Only act as clients", "Only act as servers", "Act as both client and server", "Cannot communicate directly"], ans: "Act as both client and server", 
+              ar: "في P2P، كل جهاز يطلب خدمات ويقدم خدمات في نفس الوقت.", 
+              en: "In Peer-to-Peer networks, every device acts as both a client and a server." },
+            { q: "Which architecture has no central server", opts: ["Client-server", "Hybrid", "P2P", "Cloud"], ans: "P2P", 
+              ar: "بنية P2P تعتمد على تواصل الأجهزة مباشرة دون خادم مركزي.", 
+              en: "P2P relies on devices communicating directly without a central server." },
+            { q: "Which attack targets the transport layer", opts: ["SQL Injection", "SYN Flood", "IP Spoofing", "ARP Spoofing"], ans: "SYN Flood", 
+              ar: "هجوم SYN Flood يستغل عملية مصافحة TCP لإرهاق الخادم.", 
+              en: "A SYN Flood attack exploits the TCP handshake to overwhelm the server." },
+            
+            { q: "What is the primary function of a switch in a LAN", opts: ["Connect different networks", "Assign IP addresses", "Forward frames using MAC addresses", "Encrypt data"], ans: "Forward frames using MAC addresses", 
+              ar: "المبدل يقرأ الماك ويوجه الإطارات للمنافذ داخل الشبكة المحلية.", 
+              en: "A switch reads the MAC address and forwards frames to the correct ports." },
+            { q: "A router mainly operates at which OSI layer", opts: ["Data Link Layer", "Network Layer", "Transport Layer", "Application Layer"], ans: "Network Layer", 
+              ar: "الموجه يعمل في طبقة الشبكة لأنه يعتمد على عناوين IP للتوجيه.", 
+              en: "A router operates at the Network Layer because it relies on IP addresses." },
+            { q: "Which component allows a device to physically connect to a network", opts: ["Router", "Switch", "Firewall", "Network Interface Card (NIC)"], ans: "Network Interface Card (NIC)", 
+              ar: "بطاقة الشبكة تسمح بتركيب سلك الشبكة أو التقاط الواي فاي.", 
+              en: "The NIC is the component that allows you to plug in a network cable or use Wi-Fi." },
+            { q: "A LAN is best described as", opts: ["A global network", "A private network in a limited area", "A wireless-only system", "A cloud-based system"], ans: "A private network in a limited area", 
+              ar: "شبكة LAN تغطي مساحة جغرافية محدودة كمنزل أو شركة.", 
+              en: "A LAN covers a limited geographic area, like a home or a single building." },
+            
+            { q: "Packet sniffing refers to", opts: ["Blocking network traffic", "Encrypting packets", "Monitoring network traffic secretly", "Deleting packets"], ans: "Monitoring network traffic secretly", 
+              ar: "التنصت على حزم البيانات في الشبكة وسرقتها سراً.", 
+              en: "Packet Sniffing is eavesdropping on data packets passing through the network." },
+            { q: "ARP poisoning is mainly used to perform", opts: ["Data backup", "Firewall configuration", "Software updates", "Man-in-the-Middle attack"], ans: "Man-in-the-Middle attack", 
+              ar: "تسميم ARP يُمكن المخترق من الوقوف بالمنتصف وسرقة البيانات.", 
+              en: "ARP Poisoning tricks devices, allowing an attacker to act as a Man-in-the-Middle." },
+            { q: "The Internet is an example of", opts: ["LAN", "WLAN", "WAN", "PAN"], ans: "WAN", 
+              ar: "الإنترنت يربط العالم بأسره، لذا فهو شبكة واسعة النطاق.", 
+              en: "The Internet connects the entire world, making it a Wide Area Network (WAN)." },
+            { q: "Which protocol is responsible for addressing and routing packets", opts: ["TCP", "UDP", "DNS", "IP"], ans: "IP", 
+              ar: "بروتوكول IP يضع العناوين ويوجه الحزم بين الشبكات.", 
+              en: "The Internet Protocol (IP) assigns addresses and oversees the routing of packets." },
+            
+            { q: "Which protocol ensures reliable data delivery", opts: ["UDP", "IP", "TCP", "DNS"], ans: "TCP", 
+              ar: "بروتوكول TCP يضمن وصول البيانات وترتيبها واسترجاع المفقود.", 
+              en: "The TCP protocol ensures data arrives reliably and in the correct order." },
+            { q: "The TCP 3-way handshake begins with", opts: ["ACK", "SYN", "SYN-ACK", "FIN"], ans: "SYN", 
+              ar: "تبدأ المصافحة بإرسال رسالة طلب تزامن (SYN) للخادم.", 
+              en: "The 3-way handshake begins by sending a synchronization request (SYN)." },
+            { q: "UDP is preferred in which scenario", opts: ["Secure email transfer", "File downloads", "Video streaming", "Banking transactions"], ans: "Video streaming", 
+              ar: "بث الفيديو يحتاج سرعة مستمرة، لذا نفضل UDP.", 
+              en: "Video streaming requires continuous transfer, making UDP preferable." },
+            { q: "DNS is mainly used to", opts: ["Encrypt traffic", "Translate domain names to IP addresses", "Block attacks", "Monitor traffic"], ans: "Translate domain names to IP addresses", 
+              ar: "الـ DNS يحول أسماء المواقع إلى أرقام IP يفهمها الحاسب.", 
+              en: "DNS translates website names (like google.com) into IP addresses." },
+            
+            { q: "A DDoS attack aims to", opts: ["Encrypt data", "Improve performance", "Authenticate users", "Overwhelm a service with traffic"], ans: "Overwhelm a service with traffic", 
+              ar: "هجوم حجب الخدمة يرسل طلبات هائلة لإسقاط الموقع.", 
+              en: "A DDoS attack aims to send a massive flood of traffic to crash a site." },
+            { q: "IP spoofing involves", opts: ["Blocking ports", "Changing MAC address", "Forging source IP address", "Encrypting packets"], ans: "Forging source IP address", 
+              ar: "تزييف عنوان IP لإخفاء هوية المهاجم الحقيقية.", 
+              en: "IP Spoofing means using a fake source IP address to hide true identity." },
+            { q: "A firewall is used to", opts: ["Increase bandwidth", "Control network traffic", "Store data", "Assign IP addresses"], ans: "Control network traffic", 
+              ar: "الجدار الناري يراقب حركة المرور ويمنع الاتصالات غير المصرح بها.", 
+              en: "A firewall monitors traffic and blocks unauthorized connections." },
+            { q: "Wireless networks transmit data using", opts: ["Fiber optics", "Copper cables", "Radio waves", "Satellites only"], ans: "Radio waves", 
+              ar: "الواي فاي ينقل البيانات عبر الهواء باستخدام موجات الراديو.", 
+              en: "Wi-Fi transmits data through the air using electromagnetic radio waves." },
+            
+            { q: "The SSID represents", opts: ["IP address", "Network speed", "Encryption type", "Network name"], ans: "Network name", 
+              ar: "SSID هو الاسم الذي يظهر لشبكة الواي فاي.", 
+              en: "The Service Set Identifier (SSID) is the name of the Wi-Fi network." },
+            { q: "Which wireless protocol is considered insecure today", opts: ["WPA3", "WPA2", "WPA", "WEP"], ans: "WEP", 
+              ar: "بروتوكول WEP قديم وتشفيره ضعيف يسهل اختراقه.", 
+              en: "The WEP protocol is old and its encryption is weak, making it insecure." },
+            { q: "An “Evil Twin” attack involves", opts: ["Encrypting Wi-Fi", "Creating a fake access point", "Blocking users", "Updating firmware"], ans: "Creating a fake access point", 
+              ar: "التوأم الشرير هو إنشاء شبكة وهمية بنفس اسم شبكة حقيقية.", 
+              en: "An Evil Twin is creating a fake Wi-Fi network with the same name as a real one." },
+            { q: "AP Isolation is used to", opts: ["Increase signal strength", "Connect multiple networks", "Prevent devices from communicating with each other", "Speed up internet"], ans: "Prevent devices from communicating with each other", 
+              ar: "عزل نقطة الوصول يمنع الأجهزة المتصلة من اختراق بعضها.", 
+              en: "AP Isolation prevents devices on the same Wi-Fi from seeing each other." }
         ];
 
         const container = document.getElementById('quiz-container');
 
         quizData.forEach((item, index) => {
-            // إنشاء كرت السؤال
             const card = document.createElement('div');
             card.className = 'question-card';
 
-            // حاوية لعنوان السؤال وزر الإعادة لتكون بجانب بعضها
             const headerDiv = document.createElement('div');
             headerDiv.className = 'question-header';
 
-            // عنوان السؤال
             const title = document.createElement('div');
             title.className = 'question-title';
             title.innerText = `${index + 1}. ${item.q}`;
             
-            // زر إعادة المحاولة (مخفي افتراضياً)
+            // زر إعادة المحاولة
             const retryBtn = document.createElement('button');
             retryBtn.className = 'retry-btn';
             retryBtn.innerHTML = '🔄 إعادة المحاولة';
@@ -325,23 +673,18 @@
             headerDiv.appendChild(retryBtn);
             card.appendChild(headerDiv);
 
-            // حاوية الخيارات
             const optionsContainer = document.createElement('div');
             optionsContainer.className = 'options-container';
 
-            // مربع الشرح
             const explanation = document.createElement('div');
             explanation.className = 'explanation';
 
-            // برمجة زر الإعادة
+            // إعادة المحاولة
             retryBtn.onclick = () => {
-                // إزالة الألوان والقفل من جميع الخيارات
                 Array.from(optionsContainer.children).forEach(child => {
                     child.classList.remove('disabled', 'correct', 'wrong');
                 });
-                // إخفاء الشرح
                 explanation.classList.remove('show', 'exp-correct', 'exp-wrong');
-                // إخفاء زر الإعادة نفسه
                 retryBtn.style.display = 'none';
             };
 
@@ -351,30 +694,48 @@
                 optionDiv.className = 'option';
                 optionDiv.innerText = opt;
 
-                // وظيفة عند الضغط على الإجابة
                 optionDiv.onclick = () => {
-                    // قفل جميع الخيارات حتى لا تتغير
                     Array.from(optionsContainer.children).forEach(child => {
                         child.classList.add('disabled');
-                        // تلوين الإجابة الصحيحة
                         if (child.innerText === item.ans) {
                             child.classList.add('correct');
                         }
                     });
 
-                    // التحقق من الإجابة
-                    if (opt === item.ans) {
-                        // إجابة صحيحة (لن يظهر زر الإعادة)
-                        explanation.classList.add('show', 'exp-correct');
-                        explanation.innerHTML = `✅ <strong>إجابة صحيحة!</strong> أحسنت.`;
-                        retryBtn.style.display = 'none'; 
+                    const isCorrect = (opt === item.ans);
+                    
+                    const titleAR = isCorrect ? "✅ إجابة صحيحة!" : "❌ إجابة خاطئة!";
+                    const titleEN = isCorrect ? "Correct Answer!" : "Wrong Answer!";
+                    
+                    // إذا أخطأ، نوضح له الإجابة الصحيحة فوق الشرح
+                    const correctAnsText = !isCorrect 
+                        ? `<div dir="ltr" style="margin-top: 5px; color: var(--wrong-text);"><strong>Correct Answer:</strong> ${item.ans}</div>
+                           <div dir="rtl" style="margin-bottom: 10px; color: var(--wrong-text);"><strong>الإجابة الصحيحة:</strong> ${item.ans}</div>` 
+                        : ``;
+
+                    if (isCorrect) {
+                        explanation.classList.add('exp-correct');
                     } else {
-                        // إجابة خاطئة (سيظهر زر الإعادة)
                         optionDiv.classList.add('wrong'); 
-                        explanation.classList.add('show', 'exp-wrong');
-                        explanation.innerHTML = `❌ <strong>إجابة خاطئة!</strong> الإجابة الصحيحة موضحة باللون الأخضر.`;
-                        retryBtn.style.display = 'inline-block'; // إظهار زر الإعادة
+                        explanation.classList.add('exp-wrong');
                     }
+                    
+                    explanation.classList.add('show');
+                    
+                    // بناء شكل الشرح من الداخل
+                    explanation.innerHTML = `
+                        <div class="exp-header">
+                            <span dir="ltr">${titleEN}</span>
+                            <span dir="rtl">${titleAR}</span>
+                        </div>
+                        ${correctAnsText}
+                        <div class="exp-body">
+                            <div class="exp-en"><strong>Explanation:</strong> ${item.en}</div>
+                            <div class="exp-ar"><strong>الشرح:</strong> ${item.ar}</div>
+                        </div>
+                    `;
+                    
+                    retryBtn.style.display = 'inline-block';
                 };
                 optionsContainer.appendChild(optionDiv);
             });

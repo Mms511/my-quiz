@@ -369,4 +369,20 @@
                         explanation.innerHTML = `✅ <strong>إجابة صحيحة!</strong> أحسنت.`;
                         retryBtn.style.display = 'none'; 
                     } else {
-                        // إجابة خاطئة (سي
+                        // إجابة خاطئة (سيظهر زر الإعادة)
+                        optionDiv.classList.add('wrong'); 
+                        explanation.classList.add('show', 'exp-wrong');
+                        explanation.innerHTML = `❌ <strong>إجابة خاطئة!</strong> الإجابة الصحيحة موضحة باللون الأخضر.`;
+                        retryBtn.style.display = 'inline-block'; // إظهار زر الإعادة
+                    }
+                };
+                optionsContainer.appendChild(optionDiv);
+            });
+
+            card.appendChild(optionsContainer);
+            card.appendChild(explanation);
+            container.appendChild(card);
+        });
+    </script>
+</body>
+</html>

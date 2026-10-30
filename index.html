@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اختبار تقنية المعلومات التفاعلي</title>
+    <title>اختبار تقنية المعلومات التفاعلي الشامل</title>
     <style>
         :root {
             --primary: #4f46e5;
@@ -39,6 +39,7 @@
         header p {
             color: #6b7280;
             font-size: 1.1em;
+            margin-top: 5px;
         }
         .question-card {
             background: var(--card-bg);
@@ -49,11 +50,36 @@
             direction: ltr; /* الأسئلة بالإنجليزية */
             text-align: left;
         }
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            gap: 15px;
+        }
         .question-title {
             font-size: 1.25em;
             font-weight: 600;
-            margin-bottom: 20px;
             color: #111827;
+            margin: 0;
+            flex-grow: 1;
+        }
+        .retry-btn {
+            background-color: #f59e0b;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 0.9em;
+            font-weight: bold;
+            display: none; /* مخفي افتراضياً */
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+        .retry-btn:hover {
+            background-color: #d97706;
         }
         .options-container {
             display: flex;
@@ -122,14 +148,14 @@
     <div class="container">
         <header>
             <h1>اختبار تقنية المعلومات الشامل</h1>
-            <p>اختر الإجابة لتصحيحها فوراً (80 سؤال)</p>
+            <p>يحتوي على 120 سؤال - اختر الإجابة لتصحيحها فوراً</p>
         </header>
         
         <div id="quiz-container"></div>
     </div>
 
     <script>
-        // جميع الأسئلة الـ 80
+        // جميع الأسئلة الـ 120
         const quizData = [
             // المجموعة 1
             { q: "Which type of computer is the most powerful?", opts: ["PC", "Server", "Mainframe", "Supercomputer"], ans: "Supercomputer" },
@@ -229,7 +255,49 @@
             { q: "Logical topology shows", opts: ["Cables only", "Device shape", "Data flow and relationships", "Hardware damage"], ans: "Data flow and relationships" },
             { q: "Which network is the smallest", opts: ["WAN", "MAN", "LAN", "PAN"], ans: "PAN" },
             { q: "In Client–Server", opts: ["All devices equal", "Clients respond", "Servers respond to requests", "No communication"], ans: "Servers respond to requests" },
-            { q: "TCP/IP is", opts: ["Hardware", "Network cable", "Communication protocol", "Storage system"], ans: "Communication protocol" }
+            { q: "TCP/IP is", opts: ["Hardware", "Network cable", "Communication protocol", "Storage system"], ans: "Communication protocol" },
+            
+            // الدفعة الجديدة (40 سؤال)
+            { q: "What is a network protocol", opts: ["A set of rules governing data transmission", "A hardware device used for communication", "A type of network cable", "A programming language"], ans: "A set of rules governing data transmission" },
+            { q: "Which component is NOT part of a protocol", opts: ["Format", "Order", "Action", "Bandwidth"], ans: "Bandwidth" },
+            { q: "What happens if two devices use different message formats", opts: ["Data is compressed", "Communication fails", "Speed increases", "Encryption is enabled"], ans: "Communication fails" },
+            { q: "The network edge includes", opts: ["Routers and backbone links", "End systems like laptops and servers", "Only switches", "Fiber cables only"], ans: "End systems like laptops and servers" },
+            { q: "The network core is responsible for", opts: ["Running applications", "User interaction", "Forwarding data across networks", "Generating packets"], ans: "Forwarding data across networks" },
+            { q: "What is the first step when accessing a website", opts: ["Packets are reassembled", "Data is encrypted", "Data is broken into packets", "Router forwards packets"], ans: "Data is broken into packets" },
+            { q: "How many layers are in the TCP/IP model", opts: ["3", "4", "5", "7"], ans: "5" },
+            { q: "Which layer is responsible for user-facing applications", opts: ["Application", "Transport", "Network", "Physical"], ans: "Application" },
+            { q: "Which protocol is used for web communication", opts: ["FTP", "SMTP", "HTTP", "DNS"], ans: "HTTP" },
+            { q: "Which transport protocol is connection-oriented", opts: ["UDP", "TCP", "IP", "HTTP"], ans: "TCP" },
+            { q: "Which protocol is faster but unreliable", opts: ["TCP", "UDP", "HTTP", "FTP"], ans: "UDP" },
+            { q: "The network layer is responsible for", opts: ["Routing packets", "Encryption", "Error detection only", "File transfer"], ans: "Routing packets" },
+            { q: "What does IP provide", opts: ["Reliable delivery", "Encryption", "Addressing and datagram format", "Application services"], ans: "Addressing and datagram format" },
+            { q: "The data link layer handles communication between", opts: ["Distant networks", "Neighboring devices", "Applications", "Servers only"], ans: "Neighboring devices" },
+            { q: "The physical layer deals with", opts: ["Packets", "Frames", "Bits", "Messages"], ans: "Bits" },
+            { q: "Which medium is most resistant to electromagnetic interference", opts: ["Twisted pair", "Wireless", "Fiber optic", "Copper"], ans: "Fiber optic" },
+            { q: "In client-server architecture, the server is", opts: ["Temporary", "Always-on", "Optional", "Mobile"], ans: "Always-on" },
+            { q: "In P2P architecture, peers", opts: ["Only act as clients", "Only act as servers", "Act as both client and server", "Cannot communicate directly"], ans: "Act as both client and server" },
+            { q: "Which architecture has no central server", opts: ["Client-server", "Hybrid", "P2P", "Cloud"], ans: "P2P" },
+            { q: "Which attack targets the transport layer", opts: ["SQL Injection", "SYN Flood", "IP Spoofing", "ARP Spoofing"], ans: "SYN Flood" },
+            { q: "What is the primary function of a switch in a LAN", opts: ["Connect different networks", "Assign IP addresses", "Forward frames using MAC addresses", "Encrypt data"], ans: "Forward frames using MAC addresses" },
+            { q: "A router mainly operates at which OSI layer", opts: ["Data Link Layer", "Network Layer", "Transport Layer", "Application Layer"], ans: "Network Layer" },
+            { q: "Which component allows a device to physically connect to a network", opts: ["Router", "Switch", "Firewall", "Network Interface Card (NIC)"], ans: "Network Interface Card (NIC)" },
+            { q: "A LAN is best described as", opts: ["A global network", "A private network in a limited area", "A wireless-only system", "A cloud-based system"], ans: "A private network in a limited area" },
+            { q: "Packet sniffing refers to", opts: ["Blocking network traffic", "Encrypting packets", "Monitoring network traffic secretly", "Deleting packets"], ans: "Monitoring network traffic secretly" },
+            { q: "ARP poisoning is mainly used to perform", opts: ["Data backup", "Firewall configuration", "Software updates", "Man-in-the-Middle attack"], ans: "Man-in-the-Middle attack" },
+            { q: "The Internet is an example of", opts: ["LAN", "WLAN", "WAN", "PAN"], ans: "WAN" },
+            { q: "Which protocol is responsible for addressing and routing packets", opts: ["TCP", "UDP", "DNS", "IP"], ans: "IP" },
+            { q: "Which protocol ensures reliable data delivery", opts: ["UDP", "IP", "TCP", "DNS"], ans: "TCP" },
+            { q: "The TCP 3-way handshake begins with", opts: ["ACK", "SYN", "SYN-ACK", "FIN"], ans: "SYN" },
+            { q: "UDP is preferred in which scenario", opts: ["Secure email transfer", "File downloads", "Video streaming", "Banking transactions"], ans: "Video streaming" },
+            { q: "DNS is mainly used to", opts: ["Encrypt traffic", "Translate domain names to IP addresses", "Block attacks", "Monitor traffic"], ans: "Translate domain names to IP addresses" },
+            { q: "A DDoS attack aims to", opts: ["Encrypt data", "Improve performance", "Authenticate users", "Overwhelm a service with traffic"], ans: "Overwhelm a service with traffic" },
+            { q: "IP spoofing involves", opts: ["Blocking ports", "Changing MAC address", "Forging source IP address", "Encrypting packets"], ans: "Forging source IP address" },
+            { q: "A firewall is used to", opts: ["Increase bandwidth", "Control network traffic", "Store data", "Assign IP addresses"], ans: "Control network traffic" },
+            { q: "Wireless networks transmit data using", opts: ["Fiber optics", "Copper cables", "Radio waves", "Satellites only"], ans: "Radio waves" },
+            { q: "The SSID represents", opts: ["IP address", "Network speed", "Encryption type", "Network name"], ans: "Network name" },
+            { q: "Which wireless protocol is considered insecure today", opts: ["WPA3", "WPA2", "WPA", "WEP"], ans: "WEP" },
+            { q: "An “Evil Twin” attack involves", opts: ["Encrypting Wi-Fi", "Creating a fake access point", "Blocking users", "Updating firmware"], ans: "Creating a fake access point" },
+            { q: "AP Isolation is used to", opts: ["Increase signal strength", "Connect multiple networks", "Prevent devices from communicating with each other", "Speed up internet"], ans: "Prevent devices from communicating with each other" }
         ];
 
         const container = document.getElementById('quiz-container');
@@ -239,11 +307,23 @@
             const card = document.createElement('div');
             card.className = 'question-card';
 
+            // حاوية لعنوان السؤال وزر الإعادة لتكون بجانب بعضها
+            const headerDiv = document.createElement('div');
+            headerDiv.className = 'question-header';
+
             // عنوان السؤال
             const title = document.createElement('div');
             title.className = 'question-title';
             title.innerText = `${index + 1}. ${item.q}`;
-            card.appendChild(title);
+            
+            // زر إعادة المحاولة (مخفي افتراضياً)
+            const retryBtn = document.createElement('button');
+            retryBtn.className = 'retry-btn';
+            retryBtn.innerHTML = '🔄 إعادة المحاولة';
+
+            headerDiv.appendChild(title);
+            headerDiv.appendChild(retryBtn);
+            card.appendChild(headerDiv);
 
             // حاوية الخيارات
             const optionsContainer = document.createElement('div');
@@ -253,6 +333,18 @@
             const explanation = document.createElement('div');
             explanation.className = 'explanation';
 
+            // برمجة زر الإعادة
+            retryBtn.onclick = () => {
+                // إزالة الألوان والقفل من جميع الخيارات
+                Array.from(optionsContainer.children).forEach(child => {
+                    child.classList.remove('disabled', 'correct', 'wrong');
+                });
+                // إخفاء الشرح
+                explanation.classList.remove('show', 'exp-correct', 'exp-wrong');
+                // إخفاء زر الإعادة نفسه
+                retryBtn.style.display = 'none';
+            };
+
             // إنشاء الخيارات
             item.opts.forEach(opt => {
                 const optionDiv = document.createElement('div');
@@ -261,10 +353,10 @@
 
                 // وظيفة عند الضغط على الإجابة
                 optionDiv.onclick = () => {
-                    // تعطيل جميع الخيارات لهذا السؤال حتى لا يتغير
+                    // قفل جميع الخيارات حتى لا تتغير
                     Array.from(optionsContainer.children).forEach(child => {
                         child.classList.add('disabled');
-                        // تلوين الإجابة الصحيحة دائماً حتى لو أخطأ الطالب
+                        // تلوين الإجابة الصحيحة
                         if (child.innerText === item.ans) {
                             child.classList.add('correct');
                         }
@@ -272,23 +364,9 @@
 
                     // التحقق من الإجابة
                     if (opt === item.ans) {
-                        // إجابة صحيحة
+                        // إجابة صحيحة (لن يظهر زر الإعادة)
                         explanation.classList.add('show', 'exp-correct');
-                        explanation.innerHTML = `✅ <strong>إجابة صحيحة!</strong> أحسنت، الخيار (${opt}) هو الإجابة المطلوبة.`;
+                        explanation.innerHTML = `✅ <strong>إجابة صحيحة!</strong> أحسنت.`;
+                        retryBtn.style.display = 'none'; 
                     } else {
-                        // إجابة خاطئة
-                        optionDiv.classList.add('wrong'); // تلوين اختيار الطالب بالأحمر
-                        explanation.classList.add('show', 'exp-wrong');
-                        explanation.innerHTML = `❌ <strong>إجابة خاطئة!</strong> الإجابة الصحيحة هي: (${item.ans}).`;
-                    }
-                };
-                optionsContainer.appendChild(optionDiv);
-            });
-
-            card.appendChild(optionsContainer);
-            card.appendChild(explanation);
-            container.appendChild(card);
-        });
-    </script>
-</body>
-</html>
+                        // إجابة خاطئة (سي
